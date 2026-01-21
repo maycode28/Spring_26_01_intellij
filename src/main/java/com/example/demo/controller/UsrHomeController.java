@@ -1,8 +1,16 @@
 package com.example.demo.controller;
 
+import lombok.AllArgsConstructor;
+import lombok.Data;
+import lombok.NoArgsConstructor;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UsrHomeController {
@@ -47,4 +55,58 @@ public class UsrHomeController {
         this.num=value;
         return "num 값 "+value+"(으)로 초기화";
     }
+
+    @RequestMapping("/usr/home/getInt")
+    @ResponseBody
+    public int getInt(){
+        return 5;
+    }
+
+    @RequestMapping("/usr/home/getString")
+    @ResponseBody
+    public String getString(){
+        return "5";
+    }
+
+    @RequestMapping("/usr/home/getMap")
+    @ResponseBody
+    public Map<String, String> getMap(){
+        Map<String, String> map = new HashMap<String, String>() {
+            {
+                put("key1", "value1");
+                put("key2", "value2");
+            }
+        };
+        return map;
+    }
+
+    @RequestMapping("/usr/home/getDouble")
+    @ResponseBody
+    public double getDouble(){
+        return 5.23;
+    }
+
+    @RequestMapping("/usr/home/getBoolean")
+    @ResponseBody
+    public boolean getBoolean(){
+        return true;
+    }
+
+    @RequestMapping("/usr/home/getList")
+    @ResponseBody
+    public List<String> getList(){
+        List<String> list = new ArrayList<>();
+        list.add("hello");
+        list.add("bye");
+        return list;
+    }
+
+    @RequestMapping("/usr/home/getArticle")
+    @ResponseBody
+    public Article getArticle(){
+        Article article = new Article (1,"hello","bye");
+        return article;
+    }
+
+
 }
