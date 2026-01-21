@@ -1,8 +1,6 @@
 package com.example.demo.controller;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import com.example.demo.vo.Article;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
@@ -14,99 +12,52 @@ import java.util.Map;
 
 @Controller
 public class UsrHomeController {
-    int num;
+    int id;
+    List<Article> articles;
     public UsrHomeController(){
-        num=0;
-    }
-    @RequestMapping("/usr/home/main")
-    @ResponseBody
-    public String showMain(){
-        return "안녕하세요";
-    }
-    @RequestMapping("/usr/home/main2")
-    @ResponseBody
-    public String showMain2(){
-        return "잘가";
-    }
-    @RequestMapping("/usr/home/main3")
-    @ResponseBody
-    public int showMain3(){
-        int a = 1;
-        int b = 2;
-        return a + b;
+        id=0;
+        articles = new ArrayList<>();
     }
 
-    @RequestMapping("/usr/home/getNum")
+    @RequestMapping("/usr/home/doAdd")
     @ResponseBody
-    public int getNum(){
-        return num++;
+    public String doAdd(String title, String body){
+        Article article = new Article (++id,title,body);
+        articles.add(article);
+        return id+"번 글 작성 완료";
     }
 
-    @RequestMapping("/usr/home/setNum")
+    @RequestMapping("/usr/home/getArticles")
     @ResponseBody
-    public String setNum(){
-        num=0;
-        return "num 값 0으로 초기화";
+    public List<Article> getArticles(){
+
+        return articles;
     }
 
-    @RequestMapping("/usr/home/setNumValue")
+    @RequestMapping("/usr/home/doDelete")
     @ResponseBody
-    public String setNumValue(int value){
-        this.num=value;
-        return "num 값 "+value+"(으)로 초기화";
-    }
-
-    @RequestMapping("/usr/home/getInt")
-    @ResponseBody
-    public int getInt(){
-        return 5;
-    }
-
-    @RequestMapping("/usr/home/getString")
-    @ResponseBody
-    public String getString(){
-        return "5";
-    }
-
-    @RequestMapping("/usr/home/getMap")
-    @ResponseBody
-    public Map<String, String> getMap(){
-        Map<String, String> map = new HashMap<String, String>() {
-            {
-                put("key1", "value1");
-                put("key2", "value2");
+    public String doDelete(int id){
+        for(Article article : articles){
+            if(article.getId()==id){
+                articles.remove(article);
+                return id+"번 글이 삭제 되었습니다";
             }
-        };
-        return map;
+        }
+        return id+"번 글은 없습니다";
+    }
+    @RequestMapping("/usr/home/doModify")
+    @ResponseBody
+    public String doModify(int id, String title, String body){
+        for(Article article : articles){
+            if(article.getId()==id){
+                article.setTitle(title);
+                article.setBody(body);
+                return id+"번 글이 수정 되었습니다"+article;
+            }
+        }
+        return id+"번 글은 없습니다";
     }
 
-    @RequestMapping("/usr/home/getDouble")
-    @ResponseBody
-    public double getDouble(){
-        return 5.23;
-    }
-
-    @RequestMapping("/usr/home/getBoolean")
-    @ResponseBody
-    public boolean getBoolean(){
-        return true;
-    }
-
-    @RequestMapping("/usr/home/getList")
-    @ResponseBody
-    public List<String> getList(){
-        List<String> list = new ArrayList<>();
-        list.add("hello");
-        list.add("bye");
-        return list;
-    }
-
-    @RequestMapping("/usr/home/getArticle")
-    @ResponseBody
-    public Article getArticle(){
-        Article article = new Article (1,"hello","bye");
-        return article;
-    }
 
 
 }
