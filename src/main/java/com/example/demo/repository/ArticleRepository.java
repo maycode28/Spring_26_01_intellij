@@ -1,52 +1,27 @@
 package com.example.demo.repository;
 
 import com.example.demo.vo.Article;
-import org.springframework.stereotype.Component;
+import org.apache.ibatis.annotations.*;
+
 
 import java.util.ArrayList;
 import java.util.List;
 
+@Mapper
+public interface ArticleRepository {
 
-@Component
+    @Insert("INSERT INTO article SET regDate = NOW(), updateDate = NOW(), title = #{title}, `body` = #{body}")
+    public int writeArticle(String title, String body) ;
 
-public class ArticleRepository {
-    private int lastArticleId;
-    public List<Article> articles;
+    @Delete("DELETE FROM article WHERE id = #{id}")
+    public void deleteArticle(int id) ;
 
-    public ArticleRepository() {
-        articles = new ArrayList<>();
-        lastArticleId = 0;
-    }
-    public Article writeArticle(String title, String body) {
-        int id = lastArticleId + 1;
+    @Update("UPDATE article SET updateDate = NOW(), title = #{title}, `body` = #{body} WHERE id = #{id}")
+    public void modifyArticle(int id, String title, String body) ;
 
-        Article article = new Article(id, title, body);
-        articles.add(article);
+    @Select("SELECT * FROM article WHERE id = #{id}")
+    public Article getArticleById(int id) ;
 
-        lastArticleId++;
-
-        return article;
-    }
-    public void deleteArticle(int id) {
-        Article article = getArticleById(id);
-        articles.remove(article);
-
-    }
-    public void modifyArticle(int id, String title, String body) {
-        Article article = getArticleById(id);
-        article.setTitle(title);
-        article.setBody(body);
-
-    }
-    public Article getArticleById(int id) {
-        for (Article article : articles) {
-            if (article.getId() == id) {
-                return article;
-            }
-        }
-        return null;
-    }
-    public List<Article> getArticles() {
-        return articles;
-    }
+    @Select("SELECT * FROM article ORDER BY id DESC")
+    public List<Article> getArticles() ;
 }

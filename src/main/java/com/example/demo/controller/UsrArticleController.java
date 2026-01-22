@@ -30,21 +30,21 @@ public class UsrArticleController {
         return article;
     }
 
-    @RequestMapping("/usr/home/doAdd")
+    @RequestMapping("/usr/article/doAdd")
     @ResponseBody
     public String doAdd(String title, String body){
         Article article = articleService.writeArticle(title, body);
         return article.getId()+"번 글 작성 완료"+article;
     }
 
-    @RequestMapping("/usr/home/getArticles")
+    @RequestMapping("/usr/article/getArticles")
     @ResponseBody
     public List<Article> getArticles(){
 
         return articleService.getArticles();
     }
 
-    @RequestMapping("/usr/home/doDelete")
+    @RequestMapping("/usr/article/doDelete")
     @ResponseBody
     public String doDelete(int id){
         Article article = articleService.getArticleById(id);
@@ -52,10 +52,12 @@ public class UsrArticleController {
         if (article == null) {
             return id+"번 글은 없습니다";
         }
+
+        articleService.deleteArticle(id);
         return id+"번 글이 삭제 되었습니다";
     }
 
-    @RequestMapping("/usr/home/doModify")
+    @RequestMapping("/usr/article/doModify")
     @ResponseBody
     public String doModify(int id, String title, String body){
 
@@ -64,8 +66,9 @@ public class UsrArticleController {
         if (article == null) {
             return id + "번 글은 없음";
         }
-        return id+"번 글이 수정 되었습니다"+article;
 
+        articleService.modifyArticle(id, title, body);
+        return id+"번 글이 수정 되었습니다"+article;
     }
 
 
