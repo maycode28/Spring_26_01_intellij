@@ -68,6 +68,7 @@ public class UsrArticleController {
         }
 
         articleService.modifyArticle(id, title, body);
+        article = articleService.getArticleById(id);
         return id+"번 글이 수정 되었습니다"+article;
     }
 
