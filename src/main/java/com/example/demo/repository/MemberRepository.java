@@ -7,4 +7,5 @@ import org.apache.ibatis.annotations.*;
 public interface MemberRepository {
     Member getMemberByLoginId(String loginId);
     void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email);
+    Member getMemberByEmail(String email);
 }

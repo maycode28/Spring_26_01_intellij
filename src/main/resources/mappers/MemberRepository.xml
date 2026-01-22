@@ -24,5 +24,10 @@
         WHERE loginId = #{loginId}
     </select>
 
+    <select id="getMemberByEmail" parameterType="map"
+            resultType="com.example.demo.vo.Member">
+        SELECT * FROM `member`
+        WHERE email = #{email}
+    </select>
 
 </mapper>

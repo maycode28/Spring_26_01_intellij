@@ -21,4 +21,8 @@ public class MemberService {
     public void doJoin(String loginId, String loginPw, String name, String nickname, String cellphoneNum, String email) {
         memberRepository.doJoin(loginId,loginPw,name,nickname,cellphoneNum,email);
     }
+
+    public Member getMemberByEmail(String email) {
+        return memberRepository.getMemberByEmail(email);
+    }
 }
