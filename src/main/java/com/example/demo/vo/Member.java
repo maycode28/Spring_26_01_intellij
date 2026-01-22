@@ -11,15 +11,14 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Article{
+public class Member {
     private int id;
-    private String title;
-    private String body;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
-
-    public Article(String title, String body) {
-        this.title=title;
-        this.body=body;
-    }
+    private String loginId;
+    private String loginPw;
+    private String name;
+    private String nickname;
+    private String cellphoneNum;
+    private String email;
 }
