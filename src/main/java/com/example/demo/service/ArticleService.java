@@ -1,7 +1,9 @@
 package com.example.demo.service;
 
 import com.example.demo.repository.ArticleRepository;
+import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.ResultData;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
@@ -25,9 +27,10 @@ public class ArticleService {
 //            articleRepository.writeArticle(title, body);
 //        }
 //    }
-    public Article writeArticle(String title, String body) {
+    public ResultData<Integer> writeArticle(String title, String body) {
         articleRepository.writeArticle(title, body);
-        return new Article(title,body);
+        int id = articleRepository.getLastInsertId();
+        return ResultData.from("S-1", Ut.f("%d번 게시글 작성", id), id);
     }
 
     public void deleteArticle(int id) {
