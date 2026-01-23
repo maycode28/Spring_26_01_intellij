@@ -1,6 +1,7 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.MemberService;
+import com.example.demo.util.Ut;
 import com.example.demo.vo.Member;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -16,17 +17,17 @@ public class UsrMemberController {
     @ResponseBody
     public String doJoin(String loginId, String loginPw, String loginPwChk, String name, String nickname, String cellphoneNum, String email){
 
-        if(loginId.isBlank()){
+        if(Ut.isEmptyOrNull(loginId)){
             return "아이디를 입력하세요";
-        } else if (loginPw.isBlank()) {
+        } else if (Ut.isEmptyOrNull(loginPw)) {
             return "비밀번호를 입력하세요";
-        }else if (name.isBlank()) {
+        }else if (Ut.isEmptyOrNull(name)) {
             return "이름을 입력하세요";
-        }else if (nickname.isBlank()) {
+        }else if (Ut.isEmptyOrNull(nickname)) {
             return "별명을 입력하세요";
-        }else if (cellphoneNum.isBlank()) {
+        }else if (Ut.isEmptyOrNull(cellphoneNum)) {
             return "전화번호를 입력하세요";
-        }else if (email.isBlank()) {
+        }else if (Ut.isEmptyOrNull(email)) {
             return "이메일을 입력하세요";
         }
 
@@ -35,14 +36,14 @@ public class UsrMemberController {
         }
         Member member = memberService.getMemberByLoginId(loginId);
         if(member!=null){
-            return "중복된 아이디입니다.";
+            return Ut.f("%s은(는) 중복된 아이디입니다.",loginId);
         }
-        member = memberService.getMemberByEmail(email);
+        member = memberService.getMemberByNameAndEmail(name, email);
         if(member!=null){
-            return "중복된 이메일입니다.";
+            return  Ut.f("이름(%s)과 이메일(%s)이 같은 계정이 존재합니다.",name,email);
         }
 
         memberService.doJoin(loginId, loginPw,name,nickname,cellphoneNum,email);
-        return nickname+"님 가입 완료!";
+        return Ut.f("%s님 가입 완료!",nickname);
     }
 }

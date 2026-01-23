@@ -22,7 +22,7 @@ public class MemberService {
         memberRepository.doJoin(loginId,loginPw,name,nickname,cellphoneNum,email);
     }
 
-    public Member getMemberByEmail(String email) {
-        return memberRepository.getMemberByEmail(email);
+    public Member getMemberByNameAndEmail(String name, String email) {
+        return memberRepository.getMemberByNameAndEmail(name, email);
     }
 }
