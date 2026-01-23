@@ -54,7 +54,7 @@ public class UsrMemberController {
 
     @RequestMapping("/usr/member/doLogout")
     @ResponseBody
-    public ResultData<Member> doLogin(HttpSession session) {
+    public ResultData<Member> doLogout(HttpSession session) {
         boolean isLogined = false;
 
         if (session.getAttribute("loginedMemberId") != null) {

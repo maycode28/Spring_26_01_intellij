@@ -52,7 +52,8 @@ public class UsrArticleController {
         if (Ut.isEmptyOrNull(body)) {
             return ResultData.from("F-2", "내용써");
         }
-        ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body);
+        int memberId = (int)session.getAttribute("loginedMemberId");
+        ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body, memberId);
         Article article = articleService.getArticleById(writeArticleRd.getData1());
         return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
     }
@@ -77,11 +78,14 @@ public class UsrArticleController {
         if (!isLogined) {
             return ResultData.from("F-A", "로그인이 필요합니다.");
         }
+        int loginedMemberId=(int)session.getAttribute("loginedMemberId");
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
             return ResultData.from("F-1", Ut.f("%d번 게시글은 없어", id));
+        }else if(loginedMemberId!=article.getMemberId()){
+            return ResultData.from("F-A2", "글의 작성자만 삭제할 수 있습니다.");
         }
 
         articleService.deleteArticle(id);
@@ -100,11 +104,14 @@ public class UsrArticleController {
         if (!isLogined) {
             return ResultData.from("F-A", "로그인이 필요합니다.");
         }
+        int loginedMemberId=(int)session.getAttribute("loginedMemberId");
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
             return ResultData.from("F-1", Ut.f("%d번 게시글은 없어", id));
+        }else if(loginedMemberId!=article.getMemberId()){
+            return ResultData.from("F-A2", "글의 작성자만 수정할 수 있습니다.");
         }
 
         articleService.modifyArticle(id, title, body);

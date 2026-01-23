@@ -1,5 +1,6 @@
 package com.example.demo.vo;
 
+import jakarta.servlet.http.HttpSession;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -17,6 +18,7 @@ public class Article{
     private String body;
     private LocalDateTime regDate;
     private LocalDateTime updateDate;
+    private int memberId;
 
     public Article(String title, String body) {
         this.title=title;
