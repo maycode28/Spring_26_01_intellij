@@ -4,6 +4,7 @@ import com.example.demo.service.ArticleService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.ResultData;
+import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -34,7 +35,17 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/doWrite")
     @ResponseBody
-    public ResultData<Article> doWrite(String title, String body){
+    public ResultData<Article> doWrite(HttpSession session, String title, String body){
+        boolean isLogined = false;
+
+        if (session.getAttribute("loginedMemberId") != null) {
+            isLogined = true;
+        }
+
+        if (!isLogined) {
+            return ResultData.from("F-A", "로그인이 필요합니다.");
+        }
+
         if (Ut.isEmptyOrNull(title)) {
             return ResultData.from("F-1", "제목써");
         }
@@ -56,7 +67,17 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/doDelete")
     @ResponseBody
-    public ResultData<Integer> doDelete(int id){
+    public ResultData<Integer> doDelete(HttpSession session, int id){
+        boolean isLogined = false;
+
+        if (session.getAttribute("loginedMemberId") != null) {
+            isLogined = true;
+        }
+
+        if (!isLogined) {
+            return ResultData.from("F-A", "로그인이 필요합니다.");
+        }
+
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
@@ -69,7 +90,16 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/doModify")
     @ResponseBody
-    public ResultData<Article> doModify (int id, String title, String body) {
+    public ResultData<Article> doModify (HttpSession session, int id, String title, String body) {
+        boolean isLogined = false;
+
+        if (session.getAttribute("loginedMemberId") != null) {
+            isLogined = true;
+        }
+
+        if (!isLogined) {
+            return ResultData.from("F-A", "로그인이 필요합니다.");
+        }
 
         Article article = articleService.getArticleById(id);
 
