@@ -35,14 +35,19 @@
 
     <select id="getArticleById" parameterType="int"
             resultType="com.example.demo.vo.Article">
-        SELECT * FROM article
-        WHERE id = #{id}
+        SELECT a.*, m.`name`
+        FROM article a
+        inner join member m
+        on a.memberId = m.id
+        WHERE a.id = #{id}
     </select>
 
     <select id="getArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT * FROM article
-        ORDER BY id DESC
+        SELECT a.*, m.`name` FROM article a
+        inner join member m
+        on a.memberId = m.id
+        ORDER BY a.id DESC
     </select>
 
 </mapper>

@@ -28,7 +28,7 @@
             </tr>
             <tr>
                 <th style="text-align: center;">작성자</th>
-                <td style="text-align: center;">${article.memberId}</td>
+                <td style="text-align: center;">${article.name}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">작성일</th>

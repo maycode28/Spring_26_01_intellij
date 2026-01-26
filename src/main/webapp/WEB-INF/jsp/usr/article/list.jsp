@@ -24,7 +24,7 @@
 					<th style="text-align: center;">ID</th>
 					<th style="text-align: center;">Registration date</th>
 					<th style="text-align: center;">Title</th>
-					<th style="text-align: center;">Member ID</th>
+					<th style="text-align: center;">Member</th>
 				</tr>
 			</thead>
 			<tbody>
@@ -35,7 +35,7 @@
 						<td style="text-align: center;">
 							<a href="detail?id=${article.id } ">${article.title }</a>
 						</td>
-						<td style="text-align: center;">${article.memberId }</td>
+						<td style="text-align: center;">${article.name}</td>
 					</tr>
 				</c:forEach>
 			</tbody>
