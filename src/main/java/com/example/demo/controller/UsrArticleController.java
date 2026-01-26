@@ -21,17 +21,16 @@ public class UsrArticleController {
     @Autowired
     private ArticleService articleService;
 
-    @RequestMapping("/usr/article/getArticle")
-    @ResponseBody
-    public ResultData<Article> getArticle(int id) {
+    @RequestMapping("/usr/article/detail")
+    public String getArticle(Model model, int id) {
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
-            return ResultData.from("F-1", Ut.f("%d번 게시글은 없음", id));
+            return  Ut.f("%d번 게시글은 없음", id);
         }
-
-        return ResultData.from("S-1", Ut.f("%d번 게시글입니다.", id), article);
+        model.addAttribute("article", article);
+        return "/usr/article/detail";
     }
 
     @RequestMapping("/usr/article/doWrite")

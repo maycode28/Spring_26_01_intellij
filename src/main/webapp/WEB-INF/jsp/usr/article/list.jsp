@@ -11,21 +11,11 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
          pageEncoding="UTF-8"%>
 
-<!DOCTYPE html>
-<html>
-<head>
-    <meta charset="UTF-8">
-    <title>게시글 목록</title>
-    <style>
-        table>thead>tr>th, table>tbody>tr>td {
-            padding: 10px;
-        }
-    </style>
-</head>
-<body>
-<a href="../home/main">메인으로 이동</a>
+<c:set var="pageTitle" value="ARTICLE LIST"></c:set>
 
-<h1>게시글 목록</h1>
+<%@ include file="../common/head.jspf"%>
+
+<hr />
 <table border="1"
        style="border-collapse: collapse; border-color: green">
     <thead>
@@ -49,6 +39,4 @@
     </tbody>
 </table>
 
-
-</body>
-</html>
+<%@ include file="../common/foot.jspf"%>
