@@ -22,10 +22,7 @@
 html>body{
     font-family: 'GMarketSans',sans;
 }
-a{
-    text-decoration: none;
-}
-
-li {
-    list-style: none;
+header>div>ul>li {
+    margin-right: 30px;
+    text-underline-position: under;
 }
