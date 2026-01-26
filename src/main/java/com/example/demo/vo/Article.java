@@ -16,8 +16,8 @@ public class Article{
     private int id;
     private String title;
     private String body;
-    private LocalDateTime regDate;
-    private LocalDateTime updateDate;
+    private String regDate;
+    private String updateDate;
     private int memberId;
 
     public Article(String title, String body) {
