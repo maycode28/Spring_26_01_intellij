@@ -4,6 +4,8 @@ import com.example.demo.service.ArticleService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.ResultData;
+import com.example.demo.vo.Rq;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,32 +24,17 @@ public class UsrArticleController {
     private ArticleService articleService;
 
     @RequestMapping("/usr/article/detail")
-    public String getArticle(HttpSession session, Model model, int id) {
-        boolean isLogined = false;
-        int loginedMemberId = 0;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-            loginedMemberId = (int) session.getAttribute("loginedMemberId");
-        }
-
-        Article article = articleService.getForPrintArticle(loginedMemberId, id);
+    public String getArticle(HttpServletRequest req, Model model, int id) {
+        Rq rq = (Rq) req.getAttribute("rq");
+        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }
 
     @RequestMapping("/usr/article/doWrite")
     @ResponseBody
-    public ResultData<Article> doWrite(HttpSession session, String title, String body){
-        boolean isLogined = false;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-        }
-
-        if (!isLogined) {
-            return ResultData.from("F-A", "로그인이 필요합니다.");
-        }
+    public ResultData<Article> doWrite(HttpServletRequest req, String title, String body){
+        Rq rq = (Rq) req.getAttribute("rq");
 
         if (Ut.isEmptyOrNull(title)) {
             return ResultData.from("F-1", "제목써");
@@ -55,7 +42,7 @@ public class UsrArticleController {
         if (Ut.isEmptyOrNull(body)) {
             return ResultData.from("F-2", "내용써");
         }
-        int memberId = (int)session.getAttribute("loginedMemberId");
+        int memberId = rq.getLoginedMemberId();
         ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body, memberId);
         Article article = articleService.getArticleById(writeArticleRd.getData1());
         return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
@@ -72,25 +59,15 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/doDelete")
     @ResponseBody
-    public String doDelete(HttpSession session, int id){
-        boolean isLogined = false;
-        int loginedMemberId = 0;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-            loginedMemberId=(int)session.getAttribute("loginedMemberId");
-        }
-
-        if (!isLogined) {
-            return Ut.jsReplace("F-A", "로그인이 필요합니다.", "../member/login");
-        }
+    public String doDelete(HttpServletRequest req, int id){
+        Rq rq = (Rq) req.getAttribute("rq");
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
             return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
         }
-        ResultData userCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
+        ResultData userCanDeleteRd = articleService.userCanDelete(rq.getLoginedMemberId(), article);
         if (userCanDeleteRd.isFail()) {
             return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
         }
@@ -102,18 +79,8 @@ public class UsrArticleController {
     }
 
     @RequestMapping("/usr/article/modify")
-    public String modify (Model model, HttpSession session, int id) {
-        boolean isLogined = false;
-        int loginedMemberId = 0;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-            loginedMemberId=(int)session.getAttribute("loginedMemberId");
-        }
-
-        if (!isLogined) {
-            return Ut.jsReplace("F-A", "로그인이 필요합니다.", "../member/login");
-        }
+    public String modify (HttpServletRequest req, Model model, int id) {
+        Rq rq = (Rq) req.getAttribute("rq");
 
         Article article = articleService.getArticleById(id);
 
@@ -121,7 +88,7 @@ public class UsrArticleController {
         if (article == null) {
             return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
         }
-        ResultData userCanModifyRd = articleService.userCanModify(loginedMemberId, article);
+        ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
         if (userCanModifyRd.isFail()) {
             return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
         }
