@@ -24,23 +24,23 @@
             <tbody>
             <tr>
                 <th style="text-align: center;">번호</th>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">${article.id}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">작성자</th>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">${article.author}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">작성일</th>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">${article.regDate}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">수정일</th>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">${article.updateDate}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">제목</th>
-                <td style="text-align: center;"></td>
+                <td style="text-align: center;">${article.title}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">내용</th>

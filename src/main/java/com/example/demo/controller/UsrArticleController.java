@@ -23,18 +23,16 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/detail")
     public String getArticle(HttpSession session, Model model, int id) {
+        boolean isLogined = false;
+        int loginedMemberId = 0;
 
-        Article article = articleService.getArticleById(id);
+        if (session.getAttribute("loginedMemberId") != null) {
+            isLogined = true;
+            loginedMemberId = (int) session.getAttribute("loginedMemberId");
+        }
 
-        if (article == null) {
-            return  Ut.f("%d번 게시글은 없음", id);
-        }
-        Boolean isAuthor = false;
-        if(session.getAttribute("loginedMemberId")!=null){
-            isAuthor=(article.getMemberId()==(int)session.getAttribute("loginedMemberId"));
-        }
+        Article article = articleService.getForPrintArticle(loginedMemberId, id);
         model.addAttribute("article", article);
-        model.addAttribute("isAuthor",isAuthor);
         return "/usr/article/detail";
     }
 
@@ -74,59 +72,68 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/doDelete")
     @ResponseBody
-    public ResultData<Integer> doDelete(HttpSession session, int id){
+    public String doDelete(HttpSession session, int id){
         boolean isLogined = false;
+        int loginedMemberId = 0;
 
         if (session.getAttribute("loginedMemberId") != null) {
             isLogined = true;
+            loginedMemberId=(int)session.getAttribute("loginedMemberId");
         }
 
         if (!isLogined) {
-            return ResultData.from("F-A", "로그인이 필요합니다.");
+            return Ut.jsReplace("F-A", "로그인이 필요합니다.", "../member/login");
         }
-        int loginedMemberId=(int)session.getAttribute("loginedMemberId");
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
-            return ResultData.from("F-1", Ut.f("%d번 게시글은 없어", id));
-        }else if(loginedMemberId!=article.getMemberId()){
-            return ResultData.from("F-A2", "글의 작성자만 삭제할 수 있습니다.");
+            return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
+        }
+        ResultData userCanDeleteRd = articleService.userCanDelete(loginedMemberId, article);
+        if (userCanDeleteRd.isFail()) {
+            return Ut.jsHistoryBack(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg());
         }
 
-        articleService.deleteArticle(id);
-        return ResultData.from("S-1", Ut.f("%d번 게시글이 삭제됨", id), id);
+        if (userCanDeleteRd.isSuccess()) {
+            articleService.deleteArticle(id);
+        }
+        return Ut.jsReplace(userCanDeleteRd.getResultCode(), userCanDeleteRd.getMsg(), "../article/list");
     }
 
     @RequestMapping("/usr/article/modify")
     public String modify (Model model, HttpSession session, int id) {
         boolean isLogined = false;
+        int loginedMemberId = 0;
 
         if (session.getAttribute("loginedMemberId") != null) {
             isLogined = true;
+            loginedMemberId=(int)session.getAttribute("loginedMemberId");
         }
 
         if (!isLogined) {
-            return "로그인이 필요합니다.";
+            return Ut.jsReplace("F-A", "로그인이 필요합니다.", "../member/login");
         }
-        int loginedMemberId=(int)session.getAttribute("loginedMemberId");
 
         Article article = articleService.getArticleById(id);
 
+
         if (article == null) {
-            return Ut.f("%d번 게시글은 없어", id);
-        }else if(loginedMemberId!=article.getMemberId()){
-            return "글의 작성자만 수정할 수 있습니다.";
+            return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
+        }
+        ResultData userCanModifyRd = articleService.userCanModify(loginedMemberId, article);
+        if (userCanModifyRd.isFail()) {
+            return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
         }
         model.addAttribute("article", article);
         return "/usr/article/modify";
-
     }
+
     @RequestMapping("/usr/article/doModify")
     @ResponseBody
-    public ResultData<Article> doModify (int id, String title, String body) {
+    public String doModify (int id, String title, String body) {
         articleService.modifyArticle(id, title, body);
-        Article article = articleService.getArticleById(id);
-        return ResultData.from("S-1", Ut.f("%d번 게시글이 수정됨", id), article);
+
+        return Ut.jsReplace("S-1", Ut.f("%d번 게시글이 수정되었습니다.", id), "../article/list");
     }
 }

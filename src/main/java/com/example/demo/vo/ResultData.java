@@ -11,6 +11,7 @@ public class ResultData<DT> {
     private DT data1;
 
     public static <DT> ResultData<DT> from(String ResultCode, String msg) {
+
         return from(ResultCode, msg, null);
     }
 
@@ -21,6 +22,13 @@ public class ResultData<DT> {
         rd.data1 = data1;
 
         return rd;
+    }
+    public boolean isSuccess() {
+        return ResultCode.startsWith("S-");
+    }
+
+    public boolean isFail() {
+        return !isSuccess();
     }
     public static <DT> ResultData<DT> newData(ResultData rd, DT newData){
         return from(rd.getResultCode(),rd.getMsg(),newData);

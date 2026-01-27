@@ -10,20 +10,17 @@ import java.util.List;
 @Mapper
 public interface ArticleRepository {
 
-//    @Insert("INSERT INTO article SET regDate = NOW(), updateDate = NOW(), title = #{title}, `body` = #{body}")
     public int writeArticle(String title, String body, int memberId) ;
 
-//    @Delete("DELETE FROM article WHERE id = #{id}")
     public void deleteArticle(int id) ;
 
-//    @Update("UPDATE article SET updateDate = NOW(), title = #{title}, `body` = #{body} WHERE id = #{id}")
     public void modifyArticle(int id, String title, String body) ;
 
-//    @Select("SELECT * FROM article WHERE id = #{id}")
     public Article getArticleById(int id) ;
 
-//    @Select("SELECT * FROM article ORDER BY id DESC")
     public List<Article> getArticles() ;
 
     int getLastInsertId();
+
+    public Article getForPrintArticle(int id);
 }

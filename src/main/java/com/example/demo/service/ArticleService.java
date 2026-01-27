@@ -17,16 +17,8 @@ public class ArticleService {
 
     public ArticleService(ArticleRepository articleRepository) {
         this.articleRepository = articleRepository;
-//        makeTestData();
     }
-//    private void makeTestData() {
-//        for (int i = 1; i <= 10; i++) {
-//            String title = "제목 " + i;
-//            String body = "내용 " + i;
-//
-//            articleRepository.writeArticle(title, body);
-//        }
-//    }
+
     public ResultData<Integer> writeArticle(String title, String body,int memberId) {
         articleRepository.writeArticle(title, body, memberId);
         int id = articleRepository.getLastInsertId();
@@ -48,6 +40,40 @@ public class ArticleService {
 
     public List<Article> getArticles() {
         return articleRepository.getArticles();
+    }
+
+    public Article getForPrintArticle(int loginedMemberId, int id) {
+
+        Article article = articleRepository.getForPrintArticle(id);
+
+        controlForPrintData(loginedMemberId, article);
+
+        return article;
+    }
+    private void controlForPrintData(int loginedMemberId, Article article) {
+        if (article == null) {
+            return;
+        }
+
+        ResultData userCanModifyRd = userCanModify(loginedMemberId, article);
+        article.setUserCanModify(userCanModifyRd.isSuccess());
+        ResultData userCanDeleteRd = userCanDelete(loginedMemberId, article);
+        article.setUserCanDelete(userCanDeleteRd.isSuccess());
+    }
+    public ResultData userCanModify(int loginedMemberId, Article article) {
+
+        if (article.getMemberId() != loginedMemberId) {
+            return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 권한 없음", article.getId()));
+        }
+
+        return ResultData.from("S-1", Ut.f("%d번 게시글 수정이 가능합니다.", article.getId()));
+    }
+    public ResultData userCanDelete(int loginedMemberId, Article article) {
+        if (article.getMemberId() != loginedMemberId) {
+            return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 삭제 권한 없음", article.getId()));
+        }
+
+        return ResultData.from("S-1", Ut.f("%d번 게시글이 삭제되었습니다.", article.getId()));
     }
 
 }

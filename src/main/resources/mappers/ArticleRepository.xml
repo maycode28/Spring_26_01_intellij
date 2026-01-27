@@ -35,20 +35,27 @@
 
     <select id="getArticleById" parameterType="int"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.`name` as author
-        FROM article a
-        inner join member m
-        on a.memberId = m.id
-        WHERE a.id = #{id}
+        SELECT *
+        FROM article
+        WHERE id = #{id}
     </select>
 
     <select id="getArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.`name` as author
+        SELECT a.*, m.nickname as author
         FROM article a
         inner join member m
         on a.memberId = m.id
         ORDER BY a.id DESC
+    </select>
+
+    <select id="getForPrintArticle" parameterType="int"
+            resultType="com.example.demo.vo.Article">
+        SELECT A.*, M.nickname AS author
+        FROM article AS A
+        INNER JOIN `member` AS M
+        ON A.memberId = M.id
+        WHERE A.id = #{id}
     </select>
 
 </mapper>

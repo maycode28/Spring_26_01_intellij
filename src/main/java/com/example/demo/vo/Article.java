@@ -19,10 +19,8 @@ public class Article{
     private String regDate;
     private String updateDate;
     private int memberId;
-    private String author;
 
-    public Article(String title, String body) {
-        this.title=title;
-        this.body=body;
-    }
+    private String author;
+    private boolean userCanModify;
+    private boolean userCanDelete;
 }
