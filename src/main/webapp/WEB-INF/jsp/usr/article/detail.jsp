@@ -24,23 +24,23 @@
             <tbody>
             <tr>
                 <th style="text-align: center;">번호</th>
-                <td style="text-align: center;">${article.id}</td>
+                <td style="text-align: center;"></td>
             </tr>
             <tr>
                 <th style="text-align: center;">작성자</th>
-                <td style="text-align: center;">${article.name}</td>
+                <td style="text-align: center;"></td>
             </tr>
             <tr>
                 <th style="text-align: center;">작성일</th>
-                <td style="text-align: center;">${article.regDate.substring(0,10)}</td>
+                <td style="text-align: center;"></td>
             </tr>
             <tr>
                 <th style="text-align: center;">수정일</th>
-                <td style="text-align: center;">${article.updateDate.substring(0,10)}</td>
+                <td style="text-align: center;"></td>
             </tr>
             <tr>
                 <th style="text-align: center;">제목</th>
-                <td style="text-align: center;">${article.title}</td>
+                <td style="text-align: center;"></td>
             </tr>
             <tr>
                 <th style="text-align: center;">내용</th>
@@ -53,7 +53,7 @@
             <button type="button" onClick="history.back();">뒤로가기</button>
             <c:if test="${isAuthor}">
             <button type="button" onClick="location.href='../article/modify?id=${article.id}';">수정</button>
-            <button type="button" onClick="location.href='../article/delete?id=${article.id}';">삭제</button>
+            <button type="button" onClick="location.href='../article/doDelete?id=${article.id}';">삭제</button>
             </c:if>
         </div>
     </div>

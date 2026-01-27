@@ -27,15 +27,15 @@
         UPDATE article
             <set>
              updateDate = NOW()
-            <if test="title!=null and title !=''">,title = #{title},</if>
-            <if test="body!=null and body!=''">,body = #{body}</if>
+            <if test="title!=null and title !=''">,title = #{title}</if>
+            <if test="body!=null and body!=''">,`body` = #{body}</if>
             </set>
         WHERE id = #{id}
     </update>
 
     <select id="getArticleById" parameterType="int"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.`name`
+        SELECT a.*, m.`name` as author
         FROM article a
         inner join member m
         on a.memberId = m.id
@@ -44,7 +44,8 @@
 
     <select id="getArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.`name` FROM article a
+        SELECT a.*, m.`name` as author
+        FROM article a
         inner join member m
         on a.memberId = m.id
         ORDER BY a.id DESC

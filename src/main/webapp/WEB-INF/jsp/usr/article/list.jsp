@@ -35,7 +35,7 @@
 						<td style="text-align: center;">
 							<a href="detail?id=${article.id } ">${article.title }</a>
 						</td>
-						<td style="text-align: center;">${article.name}</td>
+						<td style="text-align: center;">${article.author}</td>
 					</tr>
 				</c:forEach>
 			</tbody>

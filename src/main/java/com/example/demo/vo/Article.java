@@ -19,7 +19,7 @@ public class Article{
     private String regDate;
     private String updateDate;
     private int memberId;
-    private String name;
+    private String author;
 
     public Article(String title, String body) {
         this.title=title;
