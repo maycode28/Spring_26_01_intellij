@@ -22,14 +22,19 @@ public class UsrArticleController {
     private ArticleService articleService;
 
     @RequestMapping("/usr/article/detail")
-    public String getArticle(Model model, int id) {
+    public String getArticle(HttpSession session, Model model, int id) {
 
         Article article = articleService.getArticleById(id);
 
         if (article == null) {
             return  Ut.f("%d번 게시글은 없음", id);
         }
+        Boolean isAuthor = false;
+        if(session.getAttribute("loginedMemberId")!=null){
+            isAuthor=(article.getMemberId()==(int)session.getAttribute("loginedMemberId"));
+        }
         model.addAttribute("article", article);
+        model.addAttribute("isAuthor",isAuthor);
         return "/usr/article/detail";
     }
 

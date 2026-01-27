@@ -51,6 +51,10 @@
 
         <div class="btns">
             <button type="button" onClick="history.back();">뒤로가기</button>
+            <c:if test="${isAuthor}">
+            <button type="button" onClick="location.href='../article/modify?id=${article.id}';">수정</button>
+            <button type="button" onClick="location.href='../article/delete?id=${article.id}';">삭제</button>
+            </c:if>
         </div>
     </div>
 </section>
