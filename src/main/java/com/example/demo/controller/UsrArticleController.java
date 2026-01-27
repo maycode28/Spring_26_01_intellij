@@ -84,11 +84,11 @@ public class UsrArticleController {
 
         Article article = articleService.getArticleById(id);
 
-
         if (article == null) {
             return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
         }
         ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
+        System.out.println(userCanModifyRd.isFail());
         if (userCanModifyRd.isFail()) {
             return Ut.jsHistoryBack(userCanModifyRd.getResultCode(), userCanModifyRd.getMsg());
         }

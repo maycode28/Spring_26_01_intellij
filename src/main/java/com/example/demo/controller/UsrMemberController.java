@@ -15,10 +15,14 @@ public class UsrMemberController {
     @Autowired
     private MemberService memberService;
 
+    @RequestMapping("/usr/member/login")
+    public String showLogin() {
+        return "/usr/member/login";
+    }
 
     @RequestMapping("/usr/member/doLogin")
     @ResponseBody
-    public ResultData<Member> doLogin(HttpSession session, String loginId, String loginPw) {
+    public String doLogin(HttpSession session, String loginId, String loginPw) {
 
         boolean isLogined = false;
 
@@ -27,34 +31,34 @@ public class UsrMemberController {
         }
 
         if (isLogined) {
-            return ResultData.from("F-A", "이미 로그인중");
+            return Ut.jsHistoryBack("F-A", "이미 로그인중");
         }
 
         if (Ut.isEmptyOrNull(loginId)) {
-            return ResultData.from("F-1", "loginId 입력해");
+            return Ut.jsHistoryBack("F-1", "아이디를 입력하세요.");
         }
         if (Ut.isEmptyOrNull(loginPw)) {
-            return ResultData.from("F-2", "loginPw 입력해");
+            return Ut.jsHistoryBack("F-2", "비밀번호를 입력하세요.");
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
 
         if (member == null) {
-            return ResultData.from("F-3", Ut.f("%s는 없는 아이디", loginId));
+            return Ut.jsHistoryBack("F-3",  Ut.f("%s는 없는 아이디", loginId));
         }
 
         if (member.getLoginPw().equals(loginPw) == false) {
-            return ResultData.from("F-4", "비밀번호 틀렸음");
+            return Ut.jsHistoryBack("F-4", "비밀번호가 틀렸습니다.");
         }
 
         session.setAttribute("loginedMemberId", member.getId());
 
-        return ResultData.from("S-1", Ut.f("%s님 환영합니다", member.getNickname()), member);
+        return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
     }
 
     @RequestMapping("/usr/member/doLogout")
     @ResponseBody
-    public ResultData<Member> doLogout(HttpSession session) {
+    public String doLogout(HttpSession session) {
         boolean isLogined = false;
 
         if (session.getAttribute("loginedMemberId") != null) {
@@ -62,10 +66,10 @@ public class UsrMemberController {
         }
 
         if (!isLogined) {
-            return ResultData.from("F-A", "이미 로그아웃 중");
+            return Ut.jsHistoryBack("F-A", "이미 로그아웃 중");
         }
         session.invalidate();
-        return ResultData.from("S-1", "로그아웃 되었습니다.");
+        return Ut.jsReplace("S-1", "로그아웃 되었습니다.", "/");
 
     }
 
