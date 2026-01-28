@@ -23,6 +23,8 @@
 
     <!-- 테일윈드 -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.1.4/tailwind.min.css">
+    <!-- 데이지UI-->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/daisyui/4.12.22/full.css" integrity="sha512-cosRt3XaYqxd4zXVh71ohEOzrI+312sPSqrN3w2JD9eAHQUvu+S4hnGeXhUp52RT0HHtH8p9w4DN66PquyxXKA==" crossorigin="anonymous" referrerpolicy="no-referrer" />
 </head>
 <body>
 <header>
@@ -36,6 +38,7 @@
             <li class="hover:underline">
                 <a href="../article/list">LIST</a>
             </li>
+
             <c:if test="${!rq.isLogined() }">
 					<li class="hover:underline">
 						<a href="../member/login">LOGIN</a>
@@ -45,6 +48,9 @@
 					</li>
 				</c:if>
 				<c:if test="${rq.isLogined() }">
+				<li class="hover:underline">
+                <a href="../article/write">WRITE</a>
+            </li>
 					<li class="hover:underline">
 						<a onclick="if(confirm('로그아웃 하시겠습니까?') == false) return false;" href="../member/doLogout">LOGOUT</a>
 					</li>

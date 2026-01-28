@@ -17,61 +17,61 @@
 <section class="mt-8 text-xl px-4">
 	<div class="mx-auto">
 		<form action="../member/doJoin" method="POST">
-			<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 				<tbody>
 					<tr>
 						<th>아이디</th>
 						<td style="text-align: center;">
-							<input name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
+							<input class="input input-neutral" name="loginId" autocomplete="off" type="text" placeholder="아이디 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>비밀번호</th>
 						<td style="text-align: center;">
-							<input name="loginPw" autocomplete="off" type="text" placeholder="비번 입력" />
+							<input class="input input-neutral" name="loginPw" autocomplete="off" type="text" placeholder="비번 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>비밀번호 확인</th>
 						<td style="text-align: center;">
-							<input name="loginPwChk" autocomplete="off" type="text" placeholder="비번확인 입력" />
+							<input class="input input-neutral" name="loginPwChk" autocomplete="off" type="text" placeholder="비번확인 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>이름</th>
 						<td style="text-align: center;">
-							<input name="name" autocomplete="off" type="text" placeholder="이름 입력" />
+							<input class="input input-neutral" name="name" autocomplete="off" type="text" placeholder="이름 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>별명</th>
 						<td style="text-align: center;">
-							<input name="nickname" autocomplete="off" type="text" placeholder="별명 입력" />
+							<input class="input input-neutral" name="nickname" autocomplete="off" type="text" placeholder="별명 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>전화번호</th>
 						<td style="text-align: center;">
-							<input name="cellphoneNum" autocomplete="off" type="text" placeholder="전화번호 입력" />
+							<input class="input input-neutral" name="cellphoneNum" autocomplete="off" type="text" placeholder="전화번호 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th>이메일</th>
 						<td style="text-align: center;">
-							<input name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
+							<input class="input input-neutral" name="email" autocomplete="off" type="text" placeholder="이메일 입력" />
 						</td>
 					</tr>
 					<tr>
 						<th></th>
 						<td style="text-align: center;">
-							<input type="submit" value="가입" />
+							<input class="btn btn-outline btn-success" type="submit" value="가입" />
 						</td>
 					</tr>
 				</tbody>
 			</table>
 		</form>
 		<div class="btns">
-			<button type="button" onClick="history.back();">뒤로가기</button>
+			<button class="btn btn-outline btn-ghost" type="button" onClick="history.back();">뒤로가기</button>
 
 
 		</div>

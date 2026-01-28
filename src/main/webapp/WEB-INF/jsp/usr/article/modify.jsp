@@ -20,7 +20,7 @@
 <h1>${article.id}번 게시글 수정</h1>
 
 	<form action="doModify" method="POST">
-	<table border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
+	<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
             <tbody>
             <tr>
                 <th style="text-align: center;">번호</th>
@@ -40,21 +40,26 @@
             </tr>
             <tr>
                 <th style="text-align: center;">제목</th>
-                <td style="text-align: center;"><input name="title" type="text" placeholder="새 제목 입력해"
-				value="${article.title}" /></td>
+                <td style="text-align: center;">
+                <input class="input input-neutral input-sm" value="${article.title }" required="required" name="title" type="text" autocomplete="off" placeholder="새 제목"/>
+                </td>
             </tr>
             <tr>
                 <th style="text-align: center;">내용</th>
-                <td style="text-align: center;"><textarea name="body" type="text" placeholder="새 내용 입력해">${article.body}</textarea></td>
+                <td style="text-align: center;"><input class="input input-neutral input-sm" value="${article.body }" required="required" name="body" type="text"
+								autocomplete="off" placeholder="새 내용" /></td>
             </tr>
             <tr>
-                <td style="text-align: center;"><input type="submit" value="수정" /></td>
+                <td style="text-align: center;"><input class="btn btn-outline btn-ghost" type="submit" value="수정" /></td>
             </tr>
 
             </tbody>
         </table>
 </form>
         <div class="btns">
-            <button type="button" onClick="history.back();">뒤로가기</button>
+            <button class="btn btn-outline btn-ghost" type="button" onClick="history.back();">뒤로가기</button>
+            <c:if test="${article.userCanDelete }">
+				<a class="btn btn-outline btn-error" href="../article/doDelete?id=${article.id }">삭제</a>
+			</c:if>
         </div>
 <%@ include file="../common/foot.jspf" %>
