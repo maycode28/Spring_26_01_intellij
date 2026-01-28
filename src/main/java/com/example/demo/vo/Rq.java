@@ -5,9 +5,14 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import org.springframework.context.annotation.Scope;
+import org.springframework.context.annotation.ScopedProxyMode;
+import org.springframework.stereotype.Component;
 
 import java.io.IOException;
 
+@Component
+@Scope(value="request",proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class Rq {
 
     @Getter
@@ -29,6 +34,7 @@ public class Rq {
             isLogined = true;
             loginedMemberId = (int) session.getAttribute("loginedMemberId");
         }
+        this.req.setAttribute("rq", this);
     }
 
     public void printHistoryBack(String msg) throws IOException {
@@ -58,5 +64,9 @@ public class Rq {
 
     public void login(Member member) {
         session.setAttribute("loginedMemberId", member.getId());
+    }
+
+    public void initBeforeActionInterceptor() {
+        System.err.println("initBeforeActionInterceptor 실행됨");
     }
 }

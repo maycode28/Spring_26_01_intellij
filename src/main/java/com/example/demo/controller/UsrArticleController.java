@@ -23,9 +23,12 @@ public class UsrArticleController {
     @Autowired
     private ArticleService articleService;
 
+    @Autowired
+    Rq rq;
+
     @RequestMapping("/usr/article/detail")
     public String getArticle(HttpServletRequest req, Model model, int id) {
-        Rq rq = (Rq) req.getAttribute("rq");
+
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
         model.addAttribute("article", article);
         return "/usr/article/detail";
@@ -34,7 +37,7 @@ public class UsrArticleController {
     @RequestMapping("/usr/article/doWrite")
     @ResponseBody
     public ResultData<Article> doWrite(HttpServletRequest req, String title, String body){
-        Rq rq = (Rq) req.getAttribute("rq");
+
 
         if (Ut.isEmptyOrNull(title)) {
             return ResultData.from("F-1", "제목써");

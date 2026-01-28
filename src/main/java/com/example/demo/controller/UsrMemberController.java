@@ -17,6 +17,9 @@ public class UsrMemberController {
     @Autowired
     private MemberService memberService;
 
+    @Autowired
+    Rq rq;
+
     @RequestMapping("/usr/member/login")
     public String showLogin() {
         return "/usr/member/login";
@@ -25,7 +28,6 @@ public class UsrMemberController {
     @RequestMapping("/usr/member/doLogin")
     @ResponseBody
     public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
-        Rq rq = (Rq) req.getAttribute("rq");
 
         if (Ut.isEmptyOrNull(loginId)) {
             return Ut.jsHistoryBack("F-1", "아이디를 입력하세요.");
