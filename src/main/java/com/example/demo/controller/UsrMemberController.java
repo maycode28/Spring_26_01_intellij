@@ -4,6 +4,8 @@ import com.example.demo.service.MemberService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Member;
 import com.example.demo.vo.ResultData;
+import com.example.demo.vo.Rq;
+import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -22,17 +24,8 @@ public class UsrMemberController {
 
     @RequestMapping("/usr/member/doLogin")
     @ResponseBody
-    public String doLogin(HttpSession session, String loginId, String loginPw) {
-
-        boolean isLogined = false;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-        }
-
-        if (isLogined) {
-            return Ut.jsHistoryBack("F-A", "이미 로그인중");
-        }
+    public String doLogin(HttpServletRequest req, String loginId, String loginPw) {
+        Rq rq = (Rq) req.getAttribute("rq");
 
         if (Ut.isEmptyOrNull(loginId)) {
             return Ut.jsHistoryBack("F-1", "아이디를 입력하세요.");
@@ -51,24 +44,18 @@ public class UsrMemberController {
             return Ut.jsHistoryBack("F-4", "비밀번호가 틀렸습니다.");
         }
 
-        session.setAttribute("loginedMemberId", member.getId());
+        rq.login(member);
+
 
         return Ut.jsReplace("S-1", Ut.f("%s님 환영합니다", member.getNickname()), "/");
     }
 
     @RequestMapping("/usr/member/doLogout")
     @ResponseBody
-    public String doLogout(HttpSession session) {
-        boolean isLogined = false;
+    public String doLogout(HttpServletRequest req) {
+        Rq rq = (Rq) req.getAttribute("rq");
 
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-        }
-
-        if (!isLogined) {
-            return Ut.jsHistoryBack("F-A", "이미 로그아웃 중");
-        }
-        session.invalidate();
+        rq.logout();
         return Ut.jsReplace("S-1", "로그아웃 되었습니다.", "/");
 
     }
@@ -76,16 +63,6 @@ public class UsrMemberController {
     @RequestMapping("/usr/member/doJoin")
     @ResponseBody
     public ResultData<Member> doJoin(HttpSession session, String loginId, String loginPw, String loginPwChk, String name, String nickname, String cellphoneNum, String email){
-
-        boolean isLogined = false;
-
-        if (session.getAttribute("loginedMemberId") != null) {
-            isLogined = true;
-        }
-
-        if (isLogined) {
-            return ResultData.from("F-A", "이미 로그인중");
-        }
 
         if(Ut.isEmptyOrNull(loginId)){
             return ResultData.from("F-1", "아이디를 입력하세요");
