@@ -27,28 +27,28 @@ public class UsrArticleController {
     Rq rq;
 
     @RequestMapping("/usr/article/detail")
-    public String getArticle(HttpServletRequest req, Model model, int id) {
+    public String getArticle( Model model, int id) {
 
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }
-
+    @RequestMapping("/usr/article/write")
+    public String write () {
+        return "/usr/article/write";
+    }
     @RequestMapping("/usr/article/doWrite")
     @ResponseBody
-    public ResultData<Article> doWrite(HttpServletRequest req, String title, String body){
-
-
+    public String doWrite(String title, String body){
         if (Ut.isEmptyOrNull(title)) {
-            return ResultData.from("F-1", "제목써");
+            return Ut.jsHistoryBack("F-1", "제목써");
         }
         if (Ut.isEmptyOrNull(body)) {
-            return ResultData.from("F-2", "내용써");
+            return Ut.jsHistoryBack("F-2", "내용써");
         }
         int memberId = rq.getLoginedMemberId();
         ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body, memberId);
-        Article article = articleService.getArticleById(writeArticleRd.getData1());
-        return ResultData.from(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), article);
+        return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), Ut.f("../article/detail?id=%d",writeArticleRd.getData1()));
     }
 
 
