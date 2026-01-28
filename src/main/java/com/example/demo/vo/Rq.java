@@ -67,6 +67,6 @@ public class Rq {
     }
 
     public void initBeforeActionInterceptor() {
-        System.err.println("initBeforeActionInterceptor 실행됨");
+//        System.err.println("initBeforeActionInterceptor 실행됨");
     }
 }

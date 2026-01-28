@@ -62,37 +62,42 @@ public class UsrMemberController {
 
     }
 
+    @RequestMapping("/usr/member/join")
+    public String join() {
+        return "/usr/member/join";
+    }
     @RequestMapping("/usr/member/doJoin")
     @ResponseBody
-    public ResultData<Member> doJoin(HttpSession session, String loginId, String loginPw, String loginPwChk, String name, String nickname, String cellphoneNum, String email){
+    public String doJoin( String loginId, String loginPw, String loginPwChk, String name, String nickname, String cellphoneNum, String email){
 
         if(Ut.isEmptyOrNull(loginId)){
-            return ResultData.from("F-1", "아이디를 입력하세요");
+            return Ut.jsHistoryBack("F-1", "아이디를 입력하세요.");
         } else if (Ut.isEmptyOrNull(loginPw)) {
-            return ResultData.from("F-2", "비밀번호를 입력하세요");
+            return Ut.jsHistoryBack("F-2", "비밀번호를 입력하세요.");
         }else if (Ut.isEmptyOrNull(name)) {
-            return ResultData.from("F-3", "이름을 입력하세요");
+            return Ut.jsHistoryBack("F-3", "이름을 입력하세요.");
         }else if (Ut.isEmptyOrNull(nickname)) {
-            return ResultData.from("F-4", "별명을 입력하세요");
+            return Ut.jsHistoryBack("F-4", "별명을 입력하세요.");
         }else if (Ut.isEmptyOrNull(cellphoneNum)) {
-            return ResultData.from("F-5", "전화번호를 입력하세요");
+            return Ut.jsHistoryBack("F-5", "전화번호를 입력하세요.");
         }else if (Ut.isEmptyOrNull(email)) {
-            return ResultData.from("F-6", "이메일을 입력하세요");
+            return Ut.jsHistoryBack("F-6", "이메일을 입력하세요.");
         }
 
         if (!loginPw.equals(loginPwChk)){
-            return ResultData.from("F-8", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
+            return Ut.jsHistoryBack("F-7", "비밀번호와 비밀번호 확인이 일치하지 않습니다.");
         }
 
         Member member = memberService.getMemberByLoginId(loginId);
         if(member!=null){
-            return ResultData.from("F-7", Ut.f("이미 사용중인 아이디(%s) 입니다", loginId));
+            return Ut.jsHistoryBack("F-8", Ut.f("이미 사용중인 아이디(%s) 입니다", loginId));
         }
         member = memberService.getMemberByNameAndEmail(name, email);
         if(member!=null){
-            return ResultData.from("F-8", Ut.f("이미 사용중인 이름(%s)과 이메일(%s) 입니다", name, email));        }
-
-        return memberService.doJoin(loginId, loginPw,name,nickname,cellphoneNum,email);
+            return Ut.jsHistoryBack("F-9", Ut.f("이미 사용중인 이름(%s)과 이메일(%s) 입니다", name, email));
+        }
+        memberService.doJoin(loginId, loginPw,name,nickname,cellphoneNum,email);
+        return Ut.jsReplace("S-1", Ut.f("%s님 가입을 축하드립니다.", nickname), "../member/login");
 
 
     }
