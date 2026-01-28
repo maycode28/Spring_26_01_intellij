@@ -5,20 +5,20 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import jakarta.servlet.http.HttpSession;
 import lombok.Getter;
+import lombok.Setter;
 import org.springframework.context.annotation.Scope;
 import org.springframework.context.annotation.ScopedProxyMode;
 import org.springframework.stereotype.Component;
 
 import java.io.IOException;
-
+@Getter
+@Setter
 @Component
 @Scope(value="request",proxyMode= ScopedProxyMode.TARGET_CLASS)
 public class Rq {
 
-    @Getter
-    private boolean isLogined;
-    @Getter
-    private int loginedMemberId;
+    private boolean isLogined = false;
+    private int loginedMemberId = 0;
 
     private HttpSession session;
 
@@ -42,7 +42,7 @@ public class Rq {
 
         println("<script>");
         if (!Ut.isEmpty(msg)) {
-            println("alert('" + msg + "');");
+            println("alert('" + msg.replace("'", "\\'") + "');");
         }
 
         println("history.back();");

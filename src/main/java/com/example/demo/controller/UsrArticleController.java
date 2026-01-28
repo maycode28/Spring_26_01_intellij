@@ -85,7 +85,7 @@ public class UsrArticleController {
     public String modify (HttpServletRequest req, Model model, int id) {
         Rq rq = (Rq) req.getAttribute("rq");
 
-        Article article = articleService.getArticleById(id);
+        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
         if (article == null) {
             return Ut.jsHistoryBack("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
