@@ -15,14 +15,16 @@ import java.util.List;
 public class BoardService {
     @Autowired
     BoardRepository boardRepository;
-    public BoardService(BoardRepository boardRepository){
-        this.boardRepository=boardRepository;
+
+    public BoardService(BoardRepository boardRepository) {
+        this.boardRepository = boardRepository;
     }
 
     public List<Board> getBoards() {
         return boardRepository.getBoards();
     }
 
-    public Board getBoardById(String id) { return boardRepository.getBoardById(id);
+    public Board getBoardById(String id) {
+        return boardRepository.getBoardById(id);
     }
 }

@@ -9,5 +9,5 @@ import java.util.List;
 public interface BoardRepository {
     public List<Board> getBoards();
 
-    public  Board getBoardById(String id);
+    public Board getBoardById(String id);
 }

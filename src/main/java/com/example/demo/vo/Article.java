@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class Article{
+public class Article {
     private int id;
     private String title;
     private String body;

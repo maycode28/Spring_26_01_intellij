@@ -23,6 +23,10 @@
         <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
             <tbody>
             <tr>
+                <th style="text-align: center;">게시판</th>
+                <td style="text-align: center;">${article.board}</td>
+            </tr>
+            <tr>
                 <th style="text-align: center;">번호</th>
                 <td style="text-align: center;">${article.id}</td>
             </tr>
@@ -52,10 +56,14 @@
         <div class="btns">
             <button class="btn btn-outline btn-ghost" type="button" onClick="history.back();">뒤로가기</button>
             <c:if test="${article.userCanModify}">
-            <button class="btn btn-outline btn-warning" type="button" onClick="location.href='../article/modify?id=${article.id}';">수정</button>
+                <button class="btn btn-outline btn-warning" type="button"
+                        onClick="location.href='../article/modify?id=${article.id}';">수정
+                </button>
             </c:if>
             <c:if test="${article.userCanDelete}">
-            <button class="btn btn-outline btn-error" type="button" onClick="location.href='../article/doDelete?id=${article.id}';">삭제</button>
+                <button class="btn btn-outline btn-error" type="button"
+                        onClick="location.href='../article/doDelete?id=${article.id}';">삭제
+                </button>
             </c:if>
         </div>
     </div>

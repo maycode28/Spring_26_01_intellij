@@ -64,11 +64,13 @@
 
     <select id="getForPrintArticle" parameterType="int"
             resultType="com.example.demo.vo.Article">
-        SELECT A.*, M.nickname AS author
-        FROM article AS A
-        INNER JOIN `member` AS M
-        ON A.memberId = M.id
-        WHERE A.id = #{id}
+        SELECT a.*, m.nickname as author, b.name as board
+        FROM article AS a
+                 INNER JOIN `member` AS m
+                            on a.memberId = m.id
+                 inner join board b
+                            on a.boardId = b.id
+        WHERE a.id = #{id}
     </select>
 
 </mapper>
