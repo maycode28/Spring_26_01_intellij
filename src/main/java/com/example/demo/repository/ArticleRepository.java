@@ -10,7 +10,7 @@ import java.util.List;
 @Mapper
 public interface ArticleRepository {
 
-    public int writeArticle(String title, String body, int memberId) ;
+    public int writeArticle(String title, String body, int memberId, int boardId) ;
 
     public void deleteArticle(int id) ;
 
@@ -23,4 +23,6 @@ public interface ArticleRepository {
     int getLastInsertId();
 
     public Article getForPrintArticle(int id);
+
+    public List<Article> getArticlesByBoardId(int boardId);
 }

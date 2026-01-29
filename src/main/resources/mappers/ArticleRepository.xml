@@ -10,7 +10,8 @@
 		updateDate = NOW(),
 		title = #{title},
             body = #{body},
-            memberId = #{memberId}
+            memberId = #{memberId},
+            boardId = #{boardId}
     </insert>
 
     <select id="getLastInsertId" parameterType="int">
@@ -46,6 +47,16 @@
         FROM article a
         inner join member m
         on a.memberId = m.id
+        ORDER BY a.id DESC
+    </select>
+
+    <select id="getArticlesByBoardId"
+            resultType="com.example.demo.vo.Article">
+        SELECT a.*, m.nickname as author
+        FROM article a
+        inner join member m
+        on a.memberId = m.id
+        where a.boardId=#{boardId}
         ORDER BY a.id DESC
     </select>
 

@@ -19,8 +19,8 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public ResultData<Integer> writeArticle(String title, String body,int memberId) {
-        articleRepository.writeArticle(title, body, memberId);
+    public ResultData<Integer> writeArticle(String title, String body,int memberId, int boardId) {
+        articleRepository.writeArticle(title, body, memberId, boardId);
         int id = articleRepository.getLastInsertId();
         return ResultData.from("S-1", Ut.f("%d번 게시글 작성", id), id);
     }
@@ -41,6 +41,7 @@ public class ArticleService {
     public List<Article> getArticles() {
         return articleRepository.getArticles();
     }
+    public List<Article> getArticlesByBoardId(int boardId) {return articleRepository.getArticlesByBoardId(boardId);}
 
     public Article getForPrintArticle(int loginedMemberId, int id) {
 
@@ -75,5 +76,6 @@ public class ArticleService {
 
         return ResultData.from("S-1", Ut.f("%d번 게시글이 삭제되었습니다.", article.getId()));
     }
+
 
 }

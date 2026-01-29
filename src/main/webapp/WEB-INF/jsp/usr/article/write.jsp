@@ -20,6 +20,18 @@
 			<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 				<tbody>
 					<tr>
+					    <th>게시판 선택</th>
+						<td style="text-align: center;">
+							<select name="board">
+      <option value="" selected disabled>--게시판 선택--</option>
+      <c:forEach var="board" items="${boards }">
+
+      <option value="${board.id }">${board.name }</option>
+      </c:forEach>
+</select>
+						</td>
+						</tr>
+						<tr>
 						<th>제목</th>
 						<td style="text-align: center;">
 							<input class="input input-neutral" name="title" autocomplete="off" type="text" placeholder="제목 입력" />

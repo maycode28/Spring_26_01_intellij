@@ -1,8 +1,10 @@
 package com.example.demo.controller;
 
 import com.example.demo.service.ArticleService;
+import com.example.demo.service.BoardService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
+import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
@@ -22,6 +24,8 @@ import java.util.Map;
 public class UsrArticleController {
     @Autowired
     private ArticleService articleService;
+    @Autowired
+    private BoardService boardService;
 
     @Autowired
     Rq rq;
@@ -34,28 +38,45 @@ public class UsrArticleController {
         return "/usr/article/detail";
     }
     @RequestMapping("/usr/article/write")
-    public String write () {
+    public String write (Model model) {
+        List<Board> boards = boardService.getBoards();
+        model.addAttribute("boards",boards);
         return "/usr/article/write";
     }
     @RequestMapping("/usr/article/doWrite")
     @ResponseBody
-    public String doWrite(String title, String body){
+    public String doWrite(String title, String body, String board){
         if (Ut.isEmptyOrNull(title)) {
             return Ut.jsHistoryBack("F-1", "제목써");
         }
         if (Ut.isEmptyOrNull(body)) {
             return Ut.jsHistoryBack("F-2", "내용써");
         }
+        if (Ut.isEmptyOrNull(board)) {
+            return Ut.jsHistoryBack("F-3", "게시판 선택해");
+        }
         int memberId = rq.getLoginedMemberId();
-        ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body, memberId);
+        int boardId = Integer.parseInt(board);
+        ResultData<Integer> writeArticleRd = articleService.writeArticle(title, body, memberId,boardId);
         return Ut.jsReplace(writeArticleRd.getResultCode(), writeArticleRd.getMsg(), Ut.f("../article/detail?id=%d",writeArticleRd.getData1()));
     }
 
 
     @RequestMapping("/usr/article/list")
-    public String showList(Model model){
-        List<Article> articles =articleService.getArticles();
+    public String showList(Model model,String id){
+        String boardName="전체 게시판";
+        List<Article> articles = null;
+        if (id==null || id.isBlank()){
+            articles =articleService.getArticles();
+        }else {
+            int boardId = Integer.parseInt(id);
+            articles = articleService.getArticlesByBoardId(boardId);
+            Board board =boardService.getBoardById(id);
+            boardName=board.getName();
+
+        }
         model.addAttribute("articles", articles);
+        model.addAttribute("board",boardName);
         return "/usr/article/list";
     }
 
