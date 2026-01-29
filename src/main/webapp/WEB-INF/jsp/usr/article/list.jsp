@@ -44,7 +44,14 @@
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<thead>
 				<tr>
-					<th style="text-align: center;">ID</th>
+				<c:choose>
+				<c:when test="${board eq '전체 게시판'}">
+					<th style="text-align: center;">Board</th>
+				</c:when>
+				<c:otherwise>
+				<th style="text-align: center;">ID</th>
+</c:otherwise>
+				</c:choose>
 					<th style="text-align: center;">Registration date</th>
 					<th style="text-align: center;">Title</th>
 					<th style="text-align: center;">Member</th>
@@ -53,7 +60,15 @@
 			<tbody>
 				<c:forEach var="article" items="${articles }">
 					<tr>
-						<td style="text-align: center;">${article.id }</td>
+					<c:choose>
+				<c:when test="${board eq '전체 게시판'}">
+					<td style="text-align: center;">${article.board }</td>
+				</c:when>
+				<c:otherwise>
+				<td style="text-align: center;">${article.id }</td>
+</c:otherwise>
+				</c:choose>
+
 						<td style="text-align: center;">${article.regDate.substring(0,10) }</td>
 						<td style="text-align: center;">
 							<a href="detail?id=${article.id } ">${article.title }</a>

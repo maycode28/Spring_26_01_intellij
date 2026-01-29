@@ -22,6 +22,7 @@ public class Article{
     private int memberId;
 
     private String author;
+    private String board;
     private boolean userCanModify;
     private boolean userCanDelete;
 }

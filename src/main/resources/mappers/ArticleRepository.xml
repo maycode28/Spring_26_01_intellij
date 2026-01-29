@@ -43,10 +43,12 @@
 
     <select id="getArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.nickname as author
+        SELECT a.*, m.nickname as author, b.name as board
         FROM article a
         inner join member m
         on a.memberId = m.id
+        inner join  board b
+        on a.boardId = b.id
         ORDER BY a.id DESC
     </select>
 
