@@ -17,7 +17,29 @@
 
 <hr />
 <section class="mt-8 text-xl px-4">
-<div class="text-xl">${board}</div>
+<div class="flex h-20 mx-auto items-center text-xl">
+<div class="flex-grow">${board}</div>
+<table>
+<tbody class="flex">
+<tr class ="p-4">
+						<td style="text-align: center;">
+							<a class="hover:underline" href="list" >전체 게시판</a>
+						</td>
+
+					</tr>
+				<c:forEach var="board" items="${boards }">
+					<tr class ="p-4">
+						<td style="text-align: center;">
+							<a class="hover:underline" href="list?id=${board.id } ">${board.name }</a>
+						</td>
+
+					</tr>
+				</c:forEach>
+			</tbody>
+			</table>
+</div>
+
+
 	<div class="mx-auto">
 		<table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">
 			<thead>

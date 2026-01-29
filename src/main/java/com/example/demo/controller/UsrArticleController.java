@@ -64,6 +64,8 @@ public class UsrArticleController {
 
     @RequestMapping("/usr/article/list")
     public String showList(Model model,String id){
+        List<Board> boards = boardService.getBoards();
+        model.addAttribute("boards",boards);
         String boardName="전체 게시판";
         List<Article> articles = null;
         if (id==null || id.isBlank()){

@@ -21,6 +21,7 @@
 }
 html>body{
     font-family: 'GMarketSans',sans;
+    text-underline-position: under;
 }
 header>div>ul>li {
     margin-right: 30px;
