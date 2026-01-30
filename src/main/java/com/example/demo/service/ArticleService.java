@@ -19,7 +19,7 @@ public class ArticleService {
         this.articleRepository = articleRepository;
     }
 
-    public ResultData<Integer> writeArticle(String title, String body,int memberId, int boardId) {
+    public ResultData<Integer> writeArticle(String title, String body, int memberId, int boardId) {
         articleRepository.writeArticle(title, body, memberId, boardId);
         int id = articleRepository.getLastInsertId();
         return ResultData.from("S-1", Ut.f("%d번 게시글 작성", id), id);
@@ -38,10 +38,15 @@ public class ArticleService {
         return articleRepository.getArticleById(id);
     }
 
-    public List<Article> getArticles() {
-        return articleRepository.getArticles();
+    public List<Article> getForPirntArticles(int cPage, int articlesPerPage) {
+        int startsFrom = cPage * 10 - 10;
+        return articleRepository.getForPirntArticles(startsFrom, articlesPerPage);
     }
-    public List<Article> getArticlesByBoardId(int boardId) {return articleRepository.getArticlesByBoardId(boardId);}
+
+    public List<Article> getForPrintArticlesByBoardId(int boardId, int cPage, int articlesPerPage) {
+        int startsFrom = cPage * 10 - 10;
+        return articleRepository.getForPrintArticlesByBoardId(boardId, startsFrom, articlesPerPage);
+    }
 
     public Article getForPrintArticle(int loginedMemberId, int id) {
 
@@ -51,6 +56,7 @@ public class ArticleService {
 
         return article;
     }
+
     private void controlForPrintData(int loginedMemberId, Article article) {
         if (article == null) {
             return;
@@ -61,6 +67,7 @@ public class ArticleService {
         ResultData userCanDeleteRd = userCanDelete(loginedMemberId, article);
         article.setUserCanDelete(userCanDeleteRd.isSuccess());
     }
+
     public ResultData userCanModify(int loginedMemberId, Article article) {
 
         if (article.getMemberId() != loginedMemberId) {
@@ -69,6 +76,7 @@ public class ArticleService {
 
         return ResultData.from("S-1", Ut.f("%d번 게시글 수정이 가능합니다.", article.getId()));
     }
+
     public ResultData userCanDelete(int loginedMemberId, Article article) {
         if (article.getMemberId() != loginedMemberId) {
             return ResultData.from("F-A2", Ut.f("%d번 게시글에 대한 삭제 권한 없음", article.getId()));
@@ -78,4 +86,11 @@ public class ArticleService {
     }
 
 
+    public int getArticleCount() {
+        return articleRepository.getArticleCount();
+    }
+
+    public int getArticleCountByBoardId(int boardId) {
+        return articleRepository.getArticleCountByBoardId(boardId);
+    }
 }

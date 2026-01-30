@@ -65,27 +65,46 @@ public class UsrArticleController {
 
 
     @RequestMapping("/usr/article/list")
-    public String showList(Model model, String id) {
+    public String showList(Model model, String id, String page) {
         Board board = boardService.getBoardById(id);
         List<Board> boards = boardService.getBoards();
         model.addAttribute("boards", boards);
         String boardName = "전체 게시판";
         List<Article> articles = null;
+        int articleCount = 0;
+        int totalPage = 1;
+        int cPage = 1;
+        int articlesPerPage = 10;
+        if (page != null) {
+            cPage = Integer.parseInt(page);
+        }
+        model.addAttribute("cPage", cPage);
         if (id == null || id.isBlank()) {
-            articles = articleService.getArticles();
-        } else if (board==null) {
-            ResultData rd = ResultData.from("F-1","존재하지 않는 게시판 입니다.");
-            model.addAttribute("rd",rd);
-            model.addAttribute("action","historyBack");
+            articles = articleService.getForPirntArticles(cPage, articlesPerPage);
+            articleCount = articleService.getArticleCount();
+        } else if (board == null) {
+            ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");
+            model.addAttribute("rd", rd);
+            model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         } else {
             int boardId = Integer.parseInt(id);
-            articles = articleService.getArticlesByBoardId(boardId);
+            articles = articleService.getForPrintArticlesByBoardId(boardId, cPage, articlesPerPage);
             boardName = board.getName();
+            articleCount = articleService.getArticleCountByBoardId(boardId);
+            model.addAttribute("boardId", boardId);
 
+        }
+        totalPage = (int) Math.ceil(articleCount / (double) articlesPerPage);
+        if (cPage > totalPage) {
+            ResultData rd = ResultData.from("F-2", "존재하지 않는 페이지 입니다.");
+            model.addAttribute("rd", rd);
+            model.addAttribute("action", "historyBack");
+            return "/usr/common/error";
         }
         model.addAttribute("articles", articles);
         model.addAttribute("board", boardName);
+        model.addAttribute("totalPage", totalPage);
         return "/usr/article/list";
     }
 
@@ -118,16 +137,16 @@ public class UsrArticleController {
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
         if (article == null) {
-            ResultData rd = ResultData.from("F-1",Ut.f("%d번 게시글은 존재하지 않습니다.", id));
-            model.addAttribute("rd",rd);
-            model.addAttribute("action","historyBack");
+            ResultData rd = ResultData.from("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
+            model.addAttribute("rd", rd);
+            model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
         ResultData userCanModifyRd = articleService.userCanModify(rq.getLoginedMemberId(), article);
         System.out.println(userCanModifyRd.isFail());
         if (userCanModifyRd.isFail()) {
-            model.addAttribute("rd",userCanModifyRd);
-            model.addAttribute("action","historyBack");
+            model.addAttribute("rd", userCanModifyRd);
+            model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
         model.addAttribute("article", article);

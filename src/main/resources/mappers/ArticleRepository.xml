@@ -24,6 +24,17 @@
         WHERE id = #{id}
     </delete>
 
+    <select id="getArticleCount" parameterType="int">
+        SELECT count(*)
+        from article;
+    </select>
+
+    <select id="getArticleCountByBoardId" parameterType="int">
+        SELECT count(*)
+        from article
+        where boardId=#{boardId};
+    </select>
+
     <update id="modifyArticle" parameterType="map">
         UPDATE article
             <set>
@@ -41,7 +52,7 @@
         WHERE id = #{id}
     </select>
 
-    <select id="getArticles"
+    <select id="getForPirntArticles"
             resultType="com.example.demo.vo.Article">
         SELECT a.*, m.nickname as author, b.name as board
         FROM article a
@@ -50,9 +61,10 @@
         inner join  board b
         on a.boardId = b.id
         ORDER BY a.id DESC
+        limit #{startsFrom}, #{articlesPerPage}
     </select>
 
-    <select id="getArticlesByBoardId"
+    <select id="getForPrintArticlesByBoardId"
             resultType="com.example.demo.vo.Article">
         SELECT a.*, m.nickname as author
         FROM article a
@@ -60,6 +72,7 @@
         on a.memberId = m.id
         where a.boardId=#{boardId}
         ORDER BY a.id DESC
+        limit #{startsFrom}, #{articlesPerPage}
     </select>
 
     <select id="getForPrintArticle" parameterType="int"
