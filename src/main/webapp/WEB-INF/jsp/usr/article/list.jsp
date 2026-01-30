@@ -86,15 +86,10 @@
         <table border="1" cellpadding="5">
             <tbody>
             <tr>
-                <c:choose>
-                    <c:when test="${block eq '1'}">
-                        <td style="text-align: center;"><a>◀</a></td>
-                    </c:when>
-                    <c:otherwise>
-                        <fmt:parseNumber value="${block*10-10}" integerOnly="true" var="beforeBlock"/>
-                        <td style="text-align: center;"><a href="list?page=${beforeBlock}">◀</a></td>
-                    </c:otherwise>
-                </c:choose>
+                <c:if test="${block ne '1'}">
+                    <fmt:parseNumber value="${block*10-10}" integerOnly="true" var="beforeBlock"/>
+                    <td style="text-align: center;"><a href="list?page=${beforeBlock}">◀</a></td>
+                </c:if>
                 <c:choose>
                     <c:when test="${block eq lastBlock}">
                         <fmt:parseNumber value="${totalPage}" integerOnly="true" var="lastNumber"/>
@@ -104,26 +99,21 @@
                     </c:otherwise>
                 </c:choose>
                 <c:forEach var="page" begin="${block*10-9}" end="${lastNumber}" step="1">
-
                     <c:choose>
                         <c:when test="${board eq '전체 게시판'}">
-                            <td style="text-align: center;"><a href="list?page=${page}">${page}</a></td>
+                            <td style="text-align: center;"><a class="btn ${page==cPage ? 'btn-active' : ''}"
+                                                               href="list?page=${page}">${page}</a></td>
                         </c:when>
                         <c:otherwise>
-                            <td style="text-align: center;"><a href="list?page=${page}&id=${boardId}">${page}</a></td>
+                            <td style="text-align: center;"><a class="btn ${page==cPage ? 'btn-active' : ''}"
+                                                               href="list?page=${page}&id=${boardId}">${page}</a></td>
                         </c:otherwise>
                     </c:choose>
-
                 </c:forEach>
-                <c:choose>
-                    <c:when test="${block eq lastBlock}">
-                        <td style="text-align: center;"><a>▶</a></td>
-                    </c:when>
-                    <c:otherwise>
-                        <fmt:parseNumber value="${block*10+1}" integerOnly="true" var="nextBlock"/>
-                        <td style="text-align: center;"><a href="list?page=${nextBlock}">▶</a></td>
-                    </c:otherwise>
-                </c:choose>
+                <c:if test="${block ne lastBlock}">
+                    <fmt:parseNumber value="${block*10+1}" integerOnly="true" var="nextBlock"/>
+                    <td style="text-align: center;"><a href="list?page=${nextBlock}">▶</a></td>
+                </c:if>
             </tr>
             </tbody>
         </table>
