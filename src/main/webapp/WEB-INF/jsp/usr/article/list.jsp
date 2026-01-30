@@ -79,6 +79,12 @@
             </c:forEach>
             </tbody>
         </table>
+        <div align="center">
+            <c:if test="${empty articles}">
+                등록된 게시글이 없습니다.
+            </c:if>
+        </div>
+
     </div>
     <fmt:parseNumber value="${(cPage +9)/10}" integerOnly="true" var="block"/>
     <fmt:parseNumber value="${(totalPage+9)/10}" integerOnly="true" var="lastBlock"/>
@@ -88,7 +94,9 @@
             <tr>
                 <c:if test="${block ne '1'}">
                     <fmt:parseNumber value="${block*10-10}" integerOnly="true" var="beforeBlock"/>
-                    <td style="text-align: center;"><a href="list?page=${beforeBlock}">◀</a></td>
+                    <td style="text-align: center;"><a
+                            href="list?page=${beforeBlock}&boardId=${param.boardId}&searchBy=${param.searchBy}&keyword=${param.keyword}">◀</a>
+                    </td>
                 </c:if>
                 <c:choose>
                     <c:when test="${block eq lastBlock}">
@@ -102,21 +110,54 @@
                     <c:choose>
                         <c:when test="${board eq '전체 게시판'}">
                             <td style="text-align: center;"><a class="btn ${page==cPage ? 'btn-active' : ''}"
-                                                               href="list?page=${page}">${page}</a></td>
+                                                               href="list?page=${page}&searchBy=${param.searchBy}&keyword=${param.keyword}">${page}</a>
+                            </td>
                         </c:when>
                         <c:otherwise>
                             <td style="text-align: center;"><a class="btn ${page==cPage ? 'btn-active' : ''}"
-                                                               href="list?page=${page}&id=${boardId}">${page}</a></td>
+                                                               href="list?page=${page}&boardId=${param.boardId}&searchBy=${param.searchBy}&keyword=${param.keyword}">${page}</a>
+                            </td>
                         </c:otherwise>
                     </c:choose>
                 </c:forEach>
                 <c:if test="${block ne lastBlock}">
                     <fmt:parseNumber value="${block*10+1}" integerOnly="true" var="nextBlock"/>
-                    <td style="text-align: center;"><a href="list?page=${nextBlock}">▶</a></td>
+                    <td style="text-align: center;"><a
+                            href="list?page=${nextBlock}&boardId=${param.boardId}&searchBy=${param.searchBy}&keyword=${param.keyword}">▶</a>
+                    </td>
                 </c:if>
             </tr>
             </tbody>
         </table>
+    </div>
+    <div align="center">
+        <form action="../article/list" method="POST">
+            <input type="hidden" name="boardId" value="${param.boardId}"/>
+            <table border="1" cellspacing="0" cellpadding="5"
+                   style=" border-collapse: collapse;">
+                <tbody>
+                <tr>
+                    <td style="text-align: center;">
+                        <select name="searchBy">
+                            <option value="title" ${param.searchBy == 'title' || empty param.searchBy ? 'selected' : ''}>
+                                제목
+                            </option>
+                            <option value="body" ${param.searchBy == 'body' ? 'selected' : ''}>내용</option>
+                            <option value="nickname" ${param.searchBy == 'nickname' ? 'selected' : ''}>작성자</option>
+                        </select>
+                    </td>
+                    <td style="text-align: center;">
+                        <input class="input input-neutral" name="keyword" autocomplete="off" type="text"
+                               placeholder="검색어를 입력하세요" value="${param.keyword}"/>
+                    </td>
+
+                    <td style="text-align: center;">
+                        <input class="btn btn-outline btn-ghost" type="submit" value="검색"/>
+                    </td>
+                </tr>
+                </tbody>
+            </table>
+        </form>
     </div>
 </section>
 

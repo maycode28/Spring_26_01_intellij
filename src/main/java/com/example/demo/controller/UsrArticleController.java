@@ -61,7 +61,7 @@ public class UsrArticleController {
 
 
     @RequestMapping("/usr/article/list")
-    public String showList(Model model, String boardId, String page) {
+    public String showList(Model model, String boardId, String page, String searchBy, String keyword) {
         Board board = boardService.getBoardById(boardId);
         List<Board> boards = boardService.getBoards();
         model.addAttribute("boards", boards);
@@ -71,26 +71,28 @@ public class UsrArticleController {
         int totalPage = 1;
         int cPage = 1;
         int articlesPerPage = 10;
-        int boardIdInt=0;
+        int boardIdInt = 0;
         if (page != null) {
             cPage = Integer.parseInt(page);
         }
         model.addAttribute("cPage", cPage);
+        System.out.println(boardId);
         if (boardId != null && !boardId.isBlank()) {
             boardIdInt = Integer.parseInt(boardId);
             boardName = board.getName();
-            model.addAttribute("boardId", boardIdInt);
 
-        } else if (boardId != null && board == null) {
+        } else if (boardId != null && !boardId.isBlank() && board == null) {
             ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");
             model.addAttribute("rd", rd);
             model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
-        articles = articleService.getForPirntArticles(boardIdInt,cPage, articlesPerPage);
-        articleCount = articleService.getArticleCount(boardIdInt);
-        totalPage = (int) Math.ceil(articleCount / (double) articlesPerPage);
-        if (cPage > totalPage) {
+        articles = articleService.getForPirntArticles(boardIdInt, cPage, articlesPerPage, searchBy, keyword);
+        articleCount = articleService.getForPrintArticleCount(boardIdInt, searchBy, keyword);
+        if (articleCount != 0) {
+            totalPage = (int) Math.ceil(articleCount / (double) articlesPerPage);
+        }
+        if (cPage != 1 && cPage > totalPage) {
             ResultData rd = ResultData.from("F-2", "존재하지 않는 페이지 입니다.");
             model.addAttribute("rd", rd);
             model.addAttribute("action", "historyBack");

@@ -40,9 +40,12 @@ public class ArticleService {
 
 
 
-    public List<Article> getForPirntArticles(int boardId, int cPage, int articlesPerPage) {
+    public List<Article> getForPirntArticles(int boardId, int cPage, int articlesPerPage,String searchBy, String keyword) {
         int startsFrom = cPage * 10 - 10;
-        return articleRepository.getForPirntArticles(boardId, startsFrom, articlesPerPage);
+        return articleRepository.getForPirntArticles(boardId, startsFrom, articlesPerPage,searchBy, keyword);
+    }
+    public int getForPrintArticleCount(int boardId,String searchBy, String keyword) {
+        return articleRepository.getForPrintArticleCount(boardId,searchBy,keyword);
     }
 
     public Article getForPrintArticle(int loginedMemberId, int id) {
@@ -82,9 +85,4 @@ public class ArticleService {
         return ResultData.from("S-1", Ut.f("%d번 게시글이 삭제되었습니다.", article.getId()));
     }
 
-
-
-    public int getArticleCount(int boardId) {
-        return articleRepository.getArticleCount(boardId);
-    }
 }
