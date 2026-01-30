@@ -38,14 +38,11 @@ public class ArticleService {
         return articleRepository.getArticleById(id);
     }
 
-    public List<Article> getForPirntArticles(int cPage, int articlesPerPage) {
-        int startsFrom = cPage * 10 - 10;
-        return articleRepository.getForPirntArticles(startsFrom, articlesPerPage);
-    }
 
-    public List<Article> getForPrintArticlesByBoardId(int boardId, int cPage, int articlesPerPage) {
+
+    public List<Article> getForPirntArticles(int boardId, int cPage, int articlesPerPage) {
         int startsFrom = cPage * 10 - 10;
-        return articleRepository.getForPrintArticlesByBoardId(boardId, startsFrom, articlesPerPage);
+        return articleRepository.getForPirntArticles(boardId, startsFrom, articlesPerPage);
     }
 
     public Article getForPrintArticle(int loginedMemberId, int id) {
@@ -86,11 +83,8 @@ public class ArticleService {
     }
 
 
-    public int getArticleCount() {
-        return articleRepository.getArticleCount();
-    }
 
-    public int getArticleCountByBoardId(int boardId) {
-        return articleRepository.getArticleCountByBoardId(boardId);
+    public int getArticleCount(int boardId) {
+        return articleRepository.getArticleCount(boardId);
     }
 }

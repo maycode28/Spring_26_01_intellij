@@ -26,13 +26,11 @@
 
     <select id="getArticleCount" parameterType="int">
         SELECT count(*)
-        from article;
-    </select>
-
-    <select id="getArticleCountByBoardId" parameterType="int">
-        SELECT count(*)
         from article
-        where boardId=#{boardId};
+        WHERE 1=1
+        <if test="boardId != 0">
+            AND boardId = #{boardId}
+        </if>
     </select>
 
     <update id="modifyArticle" parameterType="map">
@@ -60,17 +58,10 @@
         on a.memberId = m.id
         inner join  board b
         on a.boardId = b.id
-        ORDER BY a.id DESC
-        limit #{startsFrom}, #{articlesPerPage}
-    </select>
-
-    <select id="getForPrintArticlesByBoardId"
-            resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.nickname as author
-        FROM article a
-        inner join member m
-        on a.memberId = m.id
-        where a.boardId=#{boardId}
+        WHERE 1=1
+        <if test="boardId != 0">
+            AND a.boardId = #{boardId}
+        </if>
         ORDER BY a.id DESC
         limit #{startsFrom}, #{articlesPerPage}
     </select>

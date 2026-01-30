@@ -8,17 +8,13 @@ import com.example.demo.vo.Board;
 import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 import jakarta.servlet.http.HttpServletRequest;
-import jakarta.servlet.http.HttpSession;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.ResponseBody;
 
-import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class UsrArticleController {
@@ -65,8 +61,8 @@ public class UsrArticleController {
 
 
     @RequestMapping("/usr/article/list")
-    public String showList(Model model, String id, String page) {
-        Board board = boardService.getBoardById(id);
+    public String showList(Model model, String boardId, String page) {
+        Board board = boardService.getBoardById(boardId);
         List<Board> boards = boardService.getBoards();
         model.addAttribute("boards", boards);
         String boardName = "전체 게시판";
@@ -75,26 +71,24 @@ public class UsrArticleController {
         int totalPage = 1;
         int cPage = 1;
         int articlesPerPage = 10;
+        int boardIdInt=0;
         if (page != null) {
             cPage = Integer.parseInt(page);
         }
         model.addAttribute("cPage", cPage);
-        if (id == null || id.isBlank()) {
-            articles = articleService.getForPirntArticles(cPage, articlesPerPage);
-            articleCount = articleService.getArticleCount();
-        } else if (board == null) {
+        if (boardId != null && !boardId.isBlank()) {
+            boardIdInt = Integer.parseInt(boardId);
+            boardName = board.getName();
+            model.addAttribute("boardId", boardIdInt);
+
+        } else if (boardId != null && board == null) {
             ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");
             model.addAttribute("rd", rd);
             model.addAttribute("action", "historyBack");
             return "/usr/common/error";
-        } else {
-            int boardId = Integer.parseInt(id);
-            articles = articleService.getForPrintArticlesByBoardId(boardId, cPage, articlesPerPage);
-            boardName = board.getName();
-            articleCount = articleService.getArticleCountByBoardId(boardId);
-            model.addAttribute("boardId", boardId);
-
         }
+        articles = articleService.getForPirntArticles(boardIdInt,cPage, articlesPerPage);
+        articleCount = articleService.getArticleCount(boardIdInt);
         totalPage = (int) Math.ceil(articleCount / (double) articlesPerPage);
         if (cPage > totalPage) {
             ResultData rd = ResultData.from("F-2", "존재하지 않는 페이지 입니다.");

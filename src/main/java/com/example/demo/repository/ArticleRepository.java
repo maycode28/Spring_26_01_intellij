@@ -18,15 +18,12 @@ public interface ArticleRepository {
 
     public Article getArticleById(int id);
 
-    public List<Article> getForPirntArticles(int startsFrom, int articlesPerPage);
 
     int getLastInsertId();
 
     public Article getForPrintArticle(int id);
 
-    public List<Article> getForPrintArticlesByBoardId(int boardId, int startsFrom, int articlesPerPage);
+    public List<Article> getForPirntArticles(int boardId, int startsFrom, int articlesPerPage);
 
-    int getArticleCount();
-
-    int getArticleCountByBoardId(int boardId);
+    int getArticleCount(int boardId);
 }

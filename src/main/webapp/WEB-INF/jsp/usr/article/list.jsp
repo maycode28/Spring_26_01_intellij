@@ -31,7 +31,7 @@
             <c:forEach var="board" items="${boards }">
                 <tr class="p-4">
                     <td style="text-align: center;">
-                        <a class="hover:underline" href="list?id=${board.id } ">${board.name }</a>
+                        <a class="hover:underline" href="list?boardId=${board.id } ">${board.name }</a>
                     </td>
 
                 </tr>
