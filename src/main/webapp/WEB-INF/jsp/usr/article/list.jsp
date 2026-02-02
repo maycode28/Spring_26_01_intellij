@@ -131,7 +131,7 @@
         </table>
     </div>
     <div align="center">
-        <form action="../article/list" method="GET">
+        <form action="../article/list" method="GET" onsubmit="return validateSearch()">
             <input type="hidden" name="boardId" value="${param.boardId}"/>
             <table border="1" cellspacing="0" cellpadding="5"
                    style=" border-collapse: collapse;">
