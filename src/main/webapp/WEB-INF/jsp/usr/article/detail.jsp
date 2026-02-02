@@ -16,8 +16,11 @@
 <%@ include file="../common/head.jspf" %>
 
 <hr/>
+<div class="flex justify-between">
+    <h1 class="p-7">${article.id}번 게시글 상세</h1>
+    <div class="p-7"><i class="fa-solid fa-eye"></i>${article.views}</div>
+</div>
 
-<h1>${article.id}번 게시글 상세</h1>
 <section class="mt-8 text-xl px-4">
     <div class="mx-auto">
         <table class="table" border="1" cellspacing="0" cellpadding="5" style="width: 100%; border-collapse: collapse;">

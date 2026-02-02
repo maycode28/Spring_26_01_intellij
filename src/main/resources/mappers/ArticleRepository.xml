@@ -107,4 +107,12 @@
         WHERE a.id = #{id}
     </select>
 
+    <update id="increaseViews" parameterType="int">
+        UPDATE article
+        <set>
+            views=views+1
+        </set>
+        WHERE id = #{id}
+    </update>
+
 </mapper>

@@ -30,6 +30,14 @@ public class UsrArticleController {
     public String getArticle(Model model, int id) {
 
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+        if (article == null) {
+            ResultData rd = ResultData.from("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
+            model.addAttribute("rd", rd);
+            model.addAttribute("action", "historyBack");
+            return "/usr/common/error";
+        }
+        articleService.increaseViews(id);
+        article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }
@@ -78,15 +86,16 @@ public class UsrArticleController {
         model.addAttribute("cPage", cPage);
         System.out.println(boardId);
         if (boardId != null && !boardId.isBlank()) {
+            if (board == null) {
+                ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");
+                model.addAttribute("rd", rd);
+                model.addAttribute("action", "historyBack");
+                return "/usr/common/error";
+            }
             boardIdInt = Integer.parseInt(boardId);
             boardName = board.getName();
-
-        } else if (boardId != null && !boardId.isBlank() && board == null) {
-            ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");
-            model.addAttribute("rd", rd);
-            model.addAttribute("action", "historyBack");
-            return "/usr/common/error";
         }
+
         articles = articleService.getForPirntArticles(boardIdInt, cPage, articlesPerPage, searchBy, keyword);
         articleCount = articleService.getForPrintArticleCount(boardIdInt, searchBy, keyword);
         if (articleCount != 0) {
@@ -99,7 +108,7 @@ public class UsrArticleController {
             return "/usr/common/error";
         }
         model.addAttribute("articles", articles);
-        model.addAttribute("board", boardName);
+        model.addAttribute("boardName", boardName);
         model.addAttribute("totalPage", totalPage);
         return "/usr/article/list";
     }

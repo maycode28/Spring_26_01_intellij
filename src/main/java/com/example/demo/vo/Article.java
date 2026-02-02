@@ -20,6 +20,7 @@ public class Article {
     private String updateDate;
     private String boardId;
     private int memberId;
+    private int views;
 
     private String author;
     private String board;

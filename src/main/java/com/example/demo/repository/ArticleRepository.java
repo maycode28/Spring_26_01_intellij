@@ -26,4 +26,6 @@ public interface ArticleRepository {
     public List<Article> getForPirntArticles(int boardId, int startsFrom, int articlesPerPage,String searchBy, String keyword);
 
     int getForPrintArticleCount(int boardId,String searchBy, String keyword);
+
+    void increaseViews(int id);
 }

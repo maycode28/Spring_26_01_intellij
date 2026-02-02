@@ -19,7 +19,7 @@
 <hr/>
 <section class="mt-8 text-xl px-4">
     <div class="flex h-20 mx-auto items-center text-xl">
-        <div class="flex-grow">${board}</div>
+        <div class="flex-grow">${boardName}</div>
         <table>
             <tbody class="flex">
             <tr class="p-4">
@@ -28,10 +28,10 @@
                 </td>
 
             </tr>
-            <c:forEach var="board" items="${boards }">
+            <c:forEach var="board" items="${boards}">
                 <tr class="p-4">
                     <td style="text-align: center;">
-                        <a class="hover:underline" href="list?boardId=${board.id } ">${board.name }</a>
+                        <a class="hover:underline" href="list?boardId=${board.id}">${board.name}</a>
                     </td>
 
                 </tr>
@@ -72,7 +72,7 @@
 
                     <td style="text-align: center;">${article.regDate.substring(0,10) }</td>
                     <td style="text-align: center;">
-                        <a href="detail?id=${article.id } ">${article.title }</a>
+                        <a href="detail?id=${article.id}">${article.title}</a>
                     </td>
                     <td style="text-align: center;">${article.author}</td>
                 </tr>
@@ -131,7 +131,7 @@
         </table>
     </div>
     <div align="center">
-        <form action="../article/list" method="POST">
+        <form action="../article/list" method="GET">
             <input type="hidden" name="boardId" value="${param.boardId}"/>
             <table border="1" cellspacing="0" cellpadding="5"
                    style=" border-collapse: collapse;">
