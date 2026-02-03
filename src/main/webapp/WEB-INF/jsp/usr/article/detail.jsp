@@ -18,7 +18,7 @@
 <hr/>
 <div class="flex justify-between">
     <h1 class="p-7">${article.id}번 게시글 상세</h1>
-    <div class="p-7"><i class="fa-solid fa-eye"></i>${article.views}</div>
+    <div class="p-7"><i class="fa-solid fa-eye"></i>${article.hitCount}</div>
 </div>
 
 <section class="mt-8 text-xl px-4">
@@ -57,7 +57,7 @@
         </table>
 
         <div class="btns">
-            <button class="btn btn-outline btn-ghost" type="button" onClick="history.back();">뒤로가기</button>
+            <button class="btn btn-outline btn-ghost" type="button" onClick="location.href= document.referrer;">뒤로 가기</button>
             <c:if test="${article.userCanModify}">
                 <button class="btn btn-outline btn-warning" type="button"
                         onClick="location.href='../article/modify?id=${article.id}';">수정

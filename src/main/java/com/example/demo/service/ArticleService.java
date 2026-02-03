@@ -22,7 +22,7 @@ public class ArticleService {
     public ResultData<Integer> writeArticle(String title, String body, int memberId, int boardId) {
         articleRepository.writeArticle(title, body, memberId, boardId);
         int id = articleRepository.getLastInsertId();
-        return ResultData.from("S-1", Ut.f("%d번 게시글 작성", id), id);
+        return ResultData.from("S-1", Ut.f("%d번 게시글 작성", id),"id", id);
     }
 
     public void deleteArticle(int id) {
@@ -85,7 +85,11 @@ public class ArticleService {
         return ResultData.from("S-1", Ut.f("%d번 게시글이 삭제되었습니다.", article.getId()));
     }
 
-    public void increaseViews(int id) {
-        articleRepository.increaseViews(id);
+    public ResultData increaseHitCount(int id) {
+        int affectedRow = articleRepository.increaseHitCount(id);
+        if (affectedRow == 0) {
+            return ResultData.from("F-1", "해당 게시글은 없음", "id", id);
+        }
+        return ResultData.from("S-1", "조회수 증가", "id", id);
     }
 }

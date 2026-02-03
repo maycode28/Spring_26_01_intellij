@@ -23,7 +23,7 @@ public class MemberService {
         memberRepository.doJoin(loginId,loginPw,name,nickname,cellphoneNum,email);
         int id = memberRepository.getLastInsertId();
         Member member = memberRepository.getMemberById(id);
-        return ResultData.from("S-1", "회원가입 성공", member);
+        return ResultData.from("S-1", "회원가입 성공","member", member);
     }
 
     public Member getMemberByNameAndEmail(String name, String email) {

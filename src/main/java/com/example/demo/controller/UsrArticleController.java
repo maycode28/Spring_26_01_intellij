@@ -29,15 +29,14 @@ public class UsrArticleController {
     @RequestMapping("/usr/article/detail")
     public String getArticle(Model model, int id) {
 
-        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-        if (article == null) {
-            ResultData rd = ResultData.from("F-1", Ut.f("%d번 게시글은 존재하지 않습니다.", id));
-            model.addAttribute("rd", rd);
+        ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+        if (increaseHitCountRd.isFail()) {
+            model.addAttribute("rd", increaseHitCountRd);
             model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
-        articleService.increaseViews(id);
-        article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+        Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }

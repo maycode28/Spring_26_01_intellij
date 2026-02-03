@@ -107,11 +107,9 @@
         WHERE a.id = #{id}
     </select>
 
-    <update id="increaseViews" parameterType="int">
+    <update id="increaseHitCount" parameterType="int">
         UPDATE article
-        <set>
-            views=views+1
-        </set>
+        set hitCount=hitCount+1
         WHERE id = #{id}
     </update>
 
