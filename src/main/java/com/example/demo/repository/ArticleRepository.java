@@ -28,4 +28,6 @@ public interface ArticleRepository {
     int getForPrintArticleCount(int boardId,String searchBy, String keyword);
 
     int increaseHitCount(int id);
+
+    int getArticleHitCount(int id);
 }

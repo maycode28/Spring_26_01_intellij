@@ -29,16 +29,22 @@ public class UsrArticleController {
     @RequestMapping("/usr/article/detail")
     public String getArticle(Model model, int id) {
 
-        ResultData increaseHitCountRd = articleService.increaseHitCount(id);
-        if (increaseHitCountRd.isFail()) {
-            model.addAttribute("rd", increaseHitCountRd);
-            model.addAttribute("action", "historyBack");
-            return "/usr/common/error";
-        }
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
 
         model.addAttribute("article", article);
         return "/usr/article/detail";
+    }
+    @RequestMapping("/usr/article/doIncreaseHitCountRd")
+    @ResponseBody
+    public ResultData doIncreaseHitCount(int id) {
+
+        ResultData increaseHitCountRd = articleService.increaseHitCount(id);
+
+        if (increaseHitCountRd.isFail()) {
+            return increaseHitCountRd;
+        }
+
+        return ResultData.newData(increaseHitCountRd, "hitCount", articleService.getArticleHitCount(id));
     }
 
     @RequestMapping("/usr/article/write")

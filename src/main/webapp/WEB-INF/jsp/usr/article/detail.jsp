@@ -16,9 +16,35 @@
 <%@ include file="../common/head.jspf" %>
 
 <hr/>
+<script>
+    const params = {};
+    params.id = parseInt('${param.id}');
+</script>
+
+<script>
+    function ArticleDetail__doIncreaseHitCount() {
+        $.get('../article/doIncreaseHitCountRd', {
+            id: params.id,
+            ajaxMode: 'Y'
+        }, function (data) {
+            if(data.msg==='해당 게시글은 없음'){
+            alert('해당 게시글은 없음');
+            history.back();
+            }else{
+            $('.article-detail__hit-count').html(data.data1);
+            }
+        }, 'json')
+    }
+
+    $(function () {
+        ArticleDetail__doIncreaseHitCount();
+    })
+</script>
+
 <div class="flex justify-between">
     <h1 class="p-7">${article.id}번 게시글 상세</h1>
-    <div class="p-7"><i class="fa-solid fa-eye"></i>${article.hitCount}</div>
+    <div class="p-7"><i class="fa-solid fa-eye"></i><span class="article-detail__hit-count">${article.hitCount }</span>
+    </div>
 </div>
 
 <section class="mt-8 text-xl px-4">
@@ -57,7 +83,8 @@
         </table>
 
         <div class="btns">
-            <button class="btn btn-outline btn-ghost" type="button" onClick="location.href= document.referrer;">뒤로 가기</button>
+            <button class="btn btn-outline btn-ghost" type="button" onClick="location.href= document.referrer;">뒤로 가기
+            </button>
             <c:if test="${article.userCanModify}">
                 <button class="btn btn-outline btn-warning" type="button"
                         onClick="location.href='../article/modify?id=${article.id}';">수정
