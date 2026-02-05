@@ -30,7 +30,12 @@ public class UsrArticleController {
     public String getArticle(Model model, int id) {
 
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
-
+        if(article==null){
+            ResultData rd = ResultData.from("F-1", "해당 글은 존재하지 않습니다.");
+            model.addAttribute("rd", rd);
+            model.addAttribute("action", "historyBack");
+            return "/usr/common/error";
+        }
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }

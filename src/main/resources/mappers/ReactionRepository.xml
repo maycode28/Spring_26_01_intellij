@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<mapper namespace="com.example.demo.repository.ReactionRepository">
+    <select id="getReaction" resultType="com.example.demo.vo.Reaction">
+        SELECT *
+        From reaction
+        where memberId = #{memberId}
+          and relDataTypeCode = #{relDataTypeCode}
+          and relId = #{relId}
+    </select>
+
+    <select id="getReactionCount" resultType="int">
+        SELECT count(*)
+        From reaction
+        where relDataTypeCode = #{relDataTypeCode}
+          and relId = #{relId}
+    </select>
+
+    <update id="updateReaction" parameterType="com.example.demo.vo.Reaction">
+        UPDATE reaction
+        <set>
+            updateDate = NOW(),
+            reactionStatus = #{reactionStatus}
+        </set>
+        WHERE memberId = #{memberId}
+        And relDataTypeCode = #{relDataTypeCode}
+        and relId = #{relId}
+    </update>
+
+    <insert id="initReaction" parameterType="com.example.demo.vo.Reaction">
+        INSERT INTO reaction
+        SET regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId}, relDataTypeCode = #{relDataTypeCode}, relId = #{relId}, reactionStatus = #{reactionStatus}
+    </insert>
+
+
+</mapper>

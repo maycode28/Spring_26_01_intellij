@@ -27,12 +27,7 @@
             id: params.id,
             ajaxMode: 'Y'
         }, function (data) {
-            if(data.msg==='해당 게시글은 없음'){
-            alert('해당 게시글은 없음');
-            history.back();
-            }else{
             $('.article-detail__hit-count').html(data.data1);
-            }
         }, 'json')
     }
 
