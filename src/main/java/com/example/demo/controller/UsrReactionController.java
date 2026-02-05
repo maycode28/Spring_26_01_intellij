@@ -35,7 +35,15 @@ public class UsrReactionController {
     @ResponseBody
     public int getReactionCount(String relDataTypeCode, int relId) {
         return reactionService.getReactionCount(relDataTypeCode, relId);
+    }
 
+    @RequestMapping("/usr/reaction/getCurrentReactionStatus")
+    @ResponseBody
+    public int getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId) {
+        if (memberId==0){
+            return 0;
+        }
+        return reactionService.getCurrentReactionStatus(memberId, relDataTypeCode, relId);
     }
 }
 

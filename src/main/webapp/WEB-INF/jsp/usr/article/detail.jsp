@@ -36,9 +36,50 @@
     })
 </script>
 
+<script>
+    let reactionStatus = 0;
+
+    function Reaction__getCurrentReactionStatus() {
+        $.get('../reaction/getCurrentReactionStatus', {
+            memberId:${memberId},
+            relDataTypeCode: 'article',
+            relId: params.id,
+        }, function (data) {
+            reactionStatus = data;
+            renderReactionUI();
+        }, 'json')
+    }
+
+    $(function () {
+        Reaction__getCurrentReactionStatus();
+    })
+
+    function renderReactionUI() {
+        console.log(reactionStatus);
+    $('.btn-like i')
+        .removeClass('fa-solid')
+        .addClass('fa-regular');
+
+    $('.btn-dislike i')
+        .removeClass('fa-solid')
+        .addClass('fa-regular');
+
+    if (reactionStatus === 1) {
+        $('.btn-like i')
+            .removeClass('fa-regular')
+            .addClass('fa-solid');
+    }
+    else if (reactionStatus === -1) {
+        $('.btn-dislike i')
+            .removeClass('fa-regular')
+            .addClass('fa-solid');
+    }
+}
+</script>
+
 <div class="flex justify-between">
     <h1 class="p-7">${article.id}번 게시글 상세</h1>
-    <div class="p-7"><i class="fa-solid fa-eye"></i><span class="article-detail__hit-count">${article.hitCount }</span>
+    <div class="p-7"><i class="fa-solid fa-eye"></i><span class="article-detail__hit-count">${article.hitCount}</span>
     </div>
 </div>
 
@@ -76,20 +117,31 @@
             </tr>
             </tbody>
         </table>
+        <div class="flex justify-between">
+            <div class="btns">
+                <button class="btn btn-outline btn-ghost" type="button" onClick="location.href= document.referrer;">뒤로
+                    가기
+                </button>
+                <c:if test="${article.userCanModify}">
+                    <button class="btn btn-outline btn-warning" type="button"
+                            onClick="location.href='../article/modify?id=${article.id}';">수정
+                    </button>
+                </c:if>
+                <c:if test="${article.userCanDelete}">
+                    <button class="btn btn-outline btn-error" type="button"
+                            onClick="location.href='../article/doDelete?id=${article.id}';">삭제
+                    </button>
+                </c:if>
+            </div>
+            <div class="btns">
+                <button class="btn btn-outline btn-ghost btn-like" type="button" onClick="">
+                    <i class="fa-regular fa-thumbs-up"></i>
+                </button>
+                <button class="btn btn-outline btn-ghost btn-dislike" type="button" onClick="">
+                    <i class="fa-regular fa-thumbs-down"></i>
+                </button>
+            </div>
 
-        <div class="btns">
-            <button class="btn btn-outline btn-ghost" type="button" onClick="location.href= document.referrer;">뒤로 가기
-            </button>
-            <c:if test="${article.userCanModify}">
-                <button class="btn btn-outline btn-warning" type="button"
-                        onClick="location.href='../article/modify?id=${article.id}';">수정
-                </button>
-            </c:if>
-            <c:if test="${article.userCanDelete}">
-                <button class="btn btn-outline btn-error" type="button"
-                        onClick="location.href='../article/doDelete?id=${article.id}';">삭제
-                </button>
-            </c:if>
         </div>
     </div>
 </section>

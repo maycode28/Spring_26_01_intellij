@@ -36,6 +36,8 @@ public class UsrArticleController {
             model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
+        int memberId = rq.getLoginedMemberId();
+        model.addAttribute("memberId",memberId);
         model.addAttribute("article", article);
         return "/usr/article/detail";
     }

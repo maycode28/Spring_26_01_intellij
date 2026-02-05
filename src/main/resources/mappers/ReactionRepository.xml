@@ -37,5 +37,12 @@
 		memberId = #{memberId}, relDataTypeCode = #{relDataTypeCode}, relId = #{relId}, reactionStatus = #{reactionStatus}
     </insert>
 
+    <select id="getCurrentReactionStatus" resultType="int">
+        SELECT reactionStatus
+        From reaction
+        WHERE memberId = #{memberId}
+                And relDataTypeCode = #{relDataTypeCode}
+                and relId = #{relId}
+    </select>
 
 </mapper>

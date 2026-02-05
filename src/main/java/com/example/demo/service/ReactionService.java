@@ -37,4 +37,8 @@ public class ReactionService {
     public void updateReaction(Reaction reaction) {
         reactionRepository.updateReaction(reaction);
     }
+
+    public int getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId) {
+        return reactionRepository.getCurrentReactionStatus(memberId, relDataTypeCode, relId);
+    }
 }
