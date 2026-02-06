@@ -37,13 +37,68 @@
 </script>
 
 <script>
+    function ArticleDetail__onReactionClick(event) {
+        console.log('CLICKED', event);s
+        const icon = event.target.closest('i');
+        let reaction;
+        if (!icon) return;
+
+        if (icon.classList.contains('fa-thumbs-up')) {
+            if (icon.classList.contains('fa-solid')) {
+                reaction = 0;
+            } else {
+                reaction = 1;
+            }
+
+        } else if (icon.classList.contains('fa-thumbs-down')) {
+            if (icon.classList.contains('fa-solid')) {
+                reaction = 0;
+            } else {
+                reaction = -1;
+            }
+        }
+        console.log(reaction+"reaction");
+        ArticleDetail__doUpdateReaction(reaction);
+    }
+
+    function ArticleDetail__doUpdateReaction(reaction) {
+        $.get('../reaction/updateReaction', {
+            memberId:${memberId},
+            relDataTypeCode: 'article',
+            relId: params.id,
+            reactionStatus: reaction
+        }, function () {
+            ArticleDetail__getReactionCount();
+            Reaction__getCurrentReactionStatus();
+        }, 'json')
+    }
+
+</script>
+
+<script>
+    function ArticleDetail__getReactionCount() {
+        $.get('../reaction/getReactionCount', {
+            relDataTypeCode: 'article',
+            relId: params.id,
+            ajaxMode: 'Y'
+        }, function (data) {
+            $('.article-detail__reaction-count').html(data);
+        }, 'json')
+    }
+
+    $(function () {
+        ArticleDetail__getReactionCount();
+    })
+</script>
+
+<script>
     let reactionStatus = 0;
 
     function Reaction__getCurrentReactionStatus() {
         $.get('../reaction/getCurrentReactionStatus', {
             memberId:${memberId},
             relDataTypeCode: 'article',
-            relId: params.id,
+            relId: params.id
         }, function (data) {
             reactionStatus = data;
             renderReactionUI();
@@ -55,26 +110,24 @@
     })
 
     function renderReactionUI() {
-        console.log(reactionStatus);
-    $('.btn-like i')
-        .removeClass('fa-solid')
-        .addClass('fa-regular');
-
-    $('.btn-dislike i')
-        .removeClass('fa-solid')
-        .addClass('fa-regular');
-
-    if (reactionStatus === 1) {
         $('.btn-like i')
-            .removeClass('fa-regular')
-            .addClass('fa-solid');
-    }
-    else if (reactionStatus === -1) {
+            .removeClass('fa-solid')
+            .addClass('fa-regular');
+
         $('.btn-dislike i')
-            .removeClass('fa-regular')
-            .addClass('fa-solid');
+            .removeClass('fa-solid')
+            .addClass('fa-regular');
+
+        if (reactionStatus === 1) {
+            $('.btn-like i')
+                .removeClass('fa-regular')
+                .addClass('fa-solid');
+        } else if (reactionStatus === -1) {
+            $('.btn-dislike i')
+                .removeClass('fa-regular')
+                .addClass('fa-solid');
+        }
     }
-}
 </script>
 
 <div class="flex justify-between">
@@ -134,10 +187,13 @@
                 </c:if>
             </div>
             <div class="btns">
-                <button class="btn btn-outline btn-ghost btn-like" type="button" onClick="">
+                <button class="btn btn-outline btn-ghost btn-like" type="button"
+                        onClick="ArticleDetail__onReactionClick(this)">
                     <i class="fa-regular fa-thumbs-up"></i>
+                    <div class="inline article-detail__reaction-count">0</div>
                 </button>
-                <button class="btn btn-outline btn-ghost btn-dislike" type="button" onClick="">
+                <button class="btn btn-outline btn-ghost btn-dislike" type="button"
+                        onClick="ArticleDetail__onReactionClick(this)">
                     <i class="fa-regular fa-thumbs-down"></i>
                 </button>
             </div>

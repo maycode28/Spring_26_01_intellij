@@ -13,5 +13,5 @@ public interface ReactionRepository {
     public int getReactionCount(String relDataTypeCode, int relId);
     public void initReaction(Reaction reaction);
     public void updateReaction(Reaction reaction);
-    public int getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId);
+    public Integer getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId);
 }

@@ -17,6 +17,7 @@
         From reaction
         where relDataTypeCode = #{relDataTypeCode}
           and relId = #{relId}
+        and reactionStatus=1
     </select>
 
     <update id="updateReaction" parameterType="com.example.demo.vo.Reaction">

@@ -96,7 +96,6 @@ public class UsrArticleController {
             cPage = Integer.parseInt(page);
         }
         model.addAttribute("cPage", cPage);
-        System.out.println(boardId);
         if (boardId != null && !boardId.isBlank()) {
             if (board == null) {
                 ResultData rd = ResultData.from("F-1", "존재하지 않는 게시판 입니다.");

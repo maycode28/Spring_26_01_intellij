@@ -39,6 +39,10 @@ public class ReactionService {
     }
 
     public int getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId) {
-        return reactionRepository.getCurrentReactionStatus(memberId, relDataTypeCode, relId);
+        Integer reactionStatus = reactionRepository.getCurrentReactionStatus(memberId, relDataTypeCode, relId);
+        if (reactionStatus==null){
+            return 0;
+        }
+        return reactionStatus;
     }
 }
