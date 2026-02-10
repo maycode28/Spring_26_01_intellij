@@ -43,12 +43,16 @@
 
     <select id="getForPirntArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.nickname as author, b.name as board
+        SELECT a.*, m.nickname as author, b.name as board, IFNULL(SUM(r.reactionStatus),0) AS extra__sumReactionPoint,
+        IFNULL(count(case when r.reactionStatus=1 then 1 end),0) AS extra__goodReactionPoint,
+        IFNULL(count(case when r.reactionStatus=-1 then 1 end),0) AS extra__badReactionPoint
         FROM article a
         inner join member m
         on a.memberId = m.id
         inner join  board b
         on a.boardId = b.id
+        left join reaction as r
+        on a.id =r.relId and r.relDataTypeCode='article'
         WHERE 1=1
         <if test="boardId != 0">
             AND a.boardId = #{boardId}
@@ -66,6 +70,7 @@
                 </when>
             </choose>
         </if>
+        group by a.id
         ORDER BY a.id DESC
         limit #{startsFrom}, #{articlesPerPage}
     </select>
@@ -98,12 +103,17 @@
 
     <select id="getForPrintArticle" parameterType="int"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.nickname as author, b.name as board
+
+        SELECT a.*, m.nickname as author, b.name as board, IFNULL(SUM(r.reactionStatus),0) AS extra__sumReactionPoint,
+               IFNULL(count(case when r.reactionStatus=1 then 1 end),0) AS extra__goodReactionPoint,
+               IFNULL(count(case when r.reactionStatus=-1 then 1 end),0) AS extra__badReactionPoint
         FROM article AS a
                  INNER JOIN `member` AS m
                             on a.memberId = m.id
                  inner join board b
                             on a.boardId = b.id
+                 left join reaction as r
+                           on a.id =r.relId and r.relDataTypeCode='article'
         WHERE a.id = #{id}
     </select>
 

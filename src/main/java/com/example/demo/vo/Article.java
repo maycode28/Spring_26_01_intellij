@@ -22,6 +22,10 @@ public class Article {
     private int memberId;
     private int hitCount;
 
+    private String extra__goodReactionPoint;
+    private String extra__badReactionPoint;
+    private String extra__sumReactionPoint;
+
     private String author;
     private String board;
     private boolean userCanModify;

@@ -38,15 +38,15 @@
 
 <script>
     function ArticleDetail__onReactionClick(reaction) {
-        if (reaction===1) {
-            if (reactionStatus===1) {
+        if (reaction === 1) {
+            if (reactionStatus === 1) {
                 reaction = 0;
             } else {
                 reaction = 1;
             }
 
-        } else if (reaction===-1) {
-            if (reactionStatus===-1) {
+        } else if (reaction === -1) {
+            if (reactionStatus === -1) {
                 reaction = 0;
             } else {
                 reaction = -1;
@@ -80,9 +80,9 @@
         }, 'json')
     }
 
-    $(function () {
-        ArticleDetail__getReactionCount();
-    })
+    // $(function () {
+    //     ArticleDetail__getReactionCount();
+    // })
 </script>
 
 <script>
@@ -162,6 +162,14 @@
                 <th style="text-align: center;">내용</th>
                 <td style="text-align: center;">${article.body}</td>
             </tr>
+            <tr>
+                <th style="text-align: center;">DISLIKE</th>
+                <td style="text-align: center;">${article.extra__badReactionPoint }</td>
+            </tr>
+            <tr>
+                <th style="text-align: center;">SUM</th>
+                <td style="text-align: center;">${article.extra__sumReactionPoint }</td>
+            </tr>
             </tbody>
         </table>
         <div class="flex justify-between">
@@ -184,7 +192,7 @@
                 <button class="btn btn-outline btn-ghost btn-like" type="button"
                         onClick="ArticleDetail__onReactionClick(1)">
                     <i class="fa-regular fa-thumbs-up"></i>
-                    <div class="inline article-detail__reaction-count">0</div>
+                    <div class="inline article-detail__reaction-count">${article.extra__goodReactionPoint}</div>
                 </button>
                 <button class="btn btn-outline btn-ghost btn-dislike" type="button"
                         onClick="ArticleDetail__onReactionClick(-1)">
