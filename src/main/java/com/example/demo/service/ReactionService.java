@@ -53,7 +53,7 @@ public class ReactionService {
                 break;
         }
 
-        return ResultData.from("S-1", "좋아요!");
+        return ResultData.from("S-3", "좋아요!");
     }
 
     public ResultData addDislikePoint(int loginedMemberId, String relDataTypeCode, int relId) {
@@ -69,7 +69,7 @@ public class ReactionService {
                 break;
         }
 
-        return ResultData.from("S-1", "싫어요!");
+        return ResultData.from("S-3", "싫어요!");
     }
 
     public ResultData deleteLikePoint(int loginedMemberId, String relDataTypeCode, int relId) {
@@ -114,5 +114,4 @@ public class ReactionService {
 
         return false;
     }
-
 }

@@ -74,25 +74,31 @@
 				console.log('data.data2Name : ' + data.data2Name);
 				console.log('data.data2 : ' + data.data2);
 				if (data.resultCode.startsWith('S-')) {
-					var likeButton = $('#likeButton');
+					var likeButton = $('#likeButton>i');
 					var likeCountC = $('.likeCount');
-					var dislikeButton = $('#dislikeButton');
+					var dislikeButton = $('#dislikeButton>i');
+                    var dislikeCountC = $('.dislikeCount');
+                    var sumPointC = $('.sumPoint');
+                    var sumPoint=data.data1-data.data2;
 
 					if (data.resultCode == 'S-1') {
 						likeButton.removeClass('fa-solid');
                         likeButton.addClass('fa-regular');
 						likeCountC.text(data.data1);
+                        sumPointC.text(sumPoint);
 					} else if (data.resultCode == 'S-2') {
 						dislikeButton.removeClass('fa-solid');
                         dislikeButton.addClass('fa-regular');
-
+                        dislikeCountC.text(data.data2);
                         likeButton.removeClass('fa-regular');
 						likeButton.addClass('fa-solid');
 						likeCountC.text(data.data1);
+                        sumPointC.text(sumPoint);
 					} else {
 						likeButton.removeClass('fa-regular');
 						likeButton.addClass('fa-solid');
 						likeCountC.text(data.data1);
+                        sumPointC.text(sumPoint);
 					}
 
 				} else {
@@ -114,7 +120,7 @@
 			url : '/usr/reaction/doDislike',
 			type : 'POST',
 			data : {
-				relTypeCode : 'article',
+				relDataTypeCode : 'article',
 				relId : articleId
 			},
 			dataType : 'json',
@@ -125,23 +131,33 @@
 				console.log('data.data2Name : ' + data.data2Name);
 				console.log('data.data2 : ' + data.data2);
 				if (data.resultCode.startsWith('S-')) {
-					var likeButton = $('#likeButton');
+					var likeButton = $('#likeButton>i');
 					var likeCountC = $('.likeCount');
-					var dislikeButton = $('#dislikeButton');
+					var dislikeButton = $('#dislikeButton>i');
+                    var dislikeCountC = $('.dislikeCount');
+                    var sumPointC = $('.sumPoint');
+                    var sumPoint=data.data1-data.data2;
 
 					if (data.resultCode == 'S-1') {
 						dislikeButton.removeClass('fa-solid');
                         dislikeButton.addClass('fa-regular');
+                        dislikeCountC.text(data.data2);
+                        sumPointC.text(sumPoint);
 					} else if (data.resultCode == 'S-2') {
 						likeButton.removeClass('fa-solid');
                         likeButton.addClass('fa-regular');
 						likeCountC.text(data.data1);
 						dislikeButton.removeClass('fa-regular');
                         dislikeButton.addClass('fa-solid');
+                        dislikeCountC.text(data.data2);
+                        sumPointC.text(sumPoint);
 
 					} else {
+                        console.log("1");
 						dislikeButton.removeClass('fa-regular');
                         dislikeButton.addClass('fa-solid');
+                        dislikeCountC.text(data.data2);
+                        sumPointC.text(sumPoint);
 					}
 
 				} else {
@@ -201,11 +217,11 @@
             </tr>
             <tr>
                 <th style="text-align: center;">DISLIKE</th>
-                <td style="text-align: center;">${article.dislikePoint}</td>
+                <td style="text-align: center;"><span class="dislikeCount">${article.dislikePoint}</span></td>
             </tr>
             <tr>
                 <th style="text-align: center;">SUM</th>
-                <td style="text-align: center;">${article.extra__sumReactionPoint }</td>
+                <td style="text-align: center;"><span class="sumPoint">${article.likePoint-article.dislikePoint}</span></td>
             </tr>
             </tbody>
         </table>

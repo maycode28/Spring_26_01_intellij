@@ -122,14 +122,14 @@
         WHERE id = #{id}
     </select>
 
-    <update id="increaseLikePointPoint" parameterType="int">
+    <update id="increaseLikePoint" parameterType="int">
         UPDATE
             article
         SET likePoint = likePoint + 1
         WHERE id = #{relId}
     </update>
 
-    <update id="decreaseLikePointPoint" parameterType="int">
+    <update id="decreaseLikePoint" parameterType="int">
         UPDATE
             article
         SET likePoint = likePoint - 1
