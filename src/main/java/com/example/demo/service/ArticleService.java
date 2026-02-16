@@ -96,4 +96,52 @@ public class ArticleService {
     public int getArticleHitCount(int id) {
         return articleRepository.getArticleHitCount(id);
     }
+
+    public ResultData increaseLikePoint(int relId) {
+        int affectedRow = articleRepository.increaseLikePoint(relId);
+
+        if (affectedRow == 0) {
+            return ResultData.from("F-1", "없는 게시물");
+        }
+
+        return ResultData.from("S-1", "좋아요 증가", "affectedRow", affectedRow);
+    }
+
+    public ResultData increaseDislikePoint(int relId) {
+        int affectedRow = articleRepository.increaseDislikePoint(relId);
+
+        if (affectedRow == 0) {
+            return ResultData.from("F-1", "없는 게시물");
+        }
+
+        return ResultData.from("S-1", "싫어요 증가", "affectedRow", affectedRow);
+    }
+
+    public ResultData decreaseLikePoint(int relId) {
+        int affectedRow = articleRepository.decreaseLikePoint(relId);
+
+        if (affectedRow == 0) {
+            return ResultData.from("F-1", "없는 게시물");
+        }
+
+        return ResultData.from("S-1", "좋아요 감소", "affectedRow", affectedRow);
+    }
+
+    public ResultData decreaseDislikePoint(int relId) {
+        int affectedRow = articleRepository.decreaseDislikePoint(relId);
+
+        if (affectedRow == 0) {
+            return ResultData.from("F-1", "없는 게시물");
+        }
+
+        return ResultData.from("S-1", "싫어요 감소", "affectedRow", affectedRow);
+    }
+
+    public int getLikePoint(int relId) {
+        return articleRepository.getLikePoint(relId);
+    }
+
+    public int getDislikePoint(int relId) {
+        return articleRepository.getDislikePoint(relId);
+    }
 }

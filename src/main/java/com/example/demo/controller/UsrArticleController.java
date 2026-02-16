@@ -2,6 +2,7 @@ package com.example.demo.controller;
 
 import com.example.demo.service.ArticleService;
 import com.example.demo.service.BoardService;
+import com.example.demo.service.ReactionService;
 import com.example.demo.util.Ut;
 import com.example.demo.vo.Article;
 import com.example.demo.vo.Board;
@@ -22,6 +23,8 @@ public class UsrArticleController {
     private ArticleService articleService;
     @Autowired
     private BoardService boardService;
+    @Autowired
+    private ReactionService reactionService;
 
     @Autowired
     Rq rq;
@@ -30,15 +33,24 @@ public class UsrArticleController {
     public String getArticle(Model model, int id) {
 
         Article article = articleService.getForPrintArticle(rq.getLoginedMemberId(), id);
+        int memberId = rq.getLoginedMemberId();
         if(article==null){
             ResultData rd = ResultData.from("F-1", "해당 글은 존재하지 않습니다.");
             model.addAttribute("rd", rd);
             model.addAttribute("action", "historyBack");
             return "/usr/common/error";
         }
-        int memberId = rq.getLoginedMemberId();
+        ResultData usersReactionRd = reactionService.usersReaction(rq.getLoginedMemberId(), "article", id);
+        if (usersReactionRd.isSuccess()) {
+            model.addAttribute("userCanMakeReaction", usersReactionRd.isSuccess());
+        }
         model.addAttribute("memberId",memberId);
         model.addAttribute("article", article);
+        model.addAttribute("usersReaction", usersReactionRd.getData1());
+        model.addAttribute("isAlreadyAddGoodRp",
+                reactionService.isAlreadyAddGoodRp(rq.getLoginedMemberId(), id, "article"));
+        model.addAttribute("isAlreadyAddBadRp",
+                reactionService.isAlreadyAddBadRp(rq.getLoginedMemberId(), id, "article"));
         return "/usr/article/detail";
     }
     @RequestMapping("/usr/article/doIncreaseHitCountRd")

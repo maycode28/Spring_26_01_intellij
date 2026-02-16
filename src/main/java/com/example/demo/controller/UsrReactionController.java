@@ -1,7 +1,9 @@
 package com.example.demo.controller;
 
+import com.example.demo.service.ArticleService;
 import com.example.demo.service.ReactionService;
 import com.example.demo.vo.Reaction;
+import com.example.demo.vo.ResultData;
 import com.example.demo.vo.Rq;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -12,38 +14,77 @@ import org.springframework.web.bind.annotation.ResponseBody;
 public class UsrReactionController {
     @Autowired
     private ReactionService reactionService;
+    @Autowired
+    private ArticleService articleService;
 
     @Autowired
     Rq rq;
 
-    @RequestMapping("/usr/reaction/updateReaction")
+    @RequestMapping("/usr/reaction/doLike")
     @ResponseBody
-    public void updateReaction(int memberId, String relDataTypeCode, int relId, int reactionStatus) {
-        Reaction reaction = reactionService.getReaction(memberId, relDataTypeCode, relId);
+    public ResultData doLike(String relDataTypeCode, int relId, String replaceUri) {
 
-        if (reaction == null) {
-            reaction = new Reaction(memberId, relDataTypeCode, relId, reactionStatus);
-            reactionService.initReaction(reaction);
-        } else {
-            reaction.setReactionStatus(reactionStatus);
-            reactionService.updateReaction(reaction);
+        ResultData usersReactionRd = reactionService.usersReaction(rq.getLoginedMemberId(), relDataTypeCode, relId);
+
+        int usersReaction = (int) usersReactionRd.getData1();
+
+        if (usersReaction == 1) {
+            ResultData rd = reactionService.deleteLikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            int goodRP = articleService.getLikePoint(relId);
+            int badRP = articleService.getDislikePoint(relId);
+            return ResultData.from("S-1", "좋아요 취소", "goodRP", goodRP, "badRP", badRP);
+        } else if (usersReaction == -1) {
+            ResultData rd = reactionService.deleteDislikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            rd = reactionService.addLikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            int goodRP = articleService.getLikePoint(relId);
+            int badRP = articleService.getDislikePoint(relId);
+            return ResultData.from("S-2", "싫어요 했었음", "goodRP", goodRP, "badRP", badRP);
         }
 
-    }
+        ResultData reactionRd = reactionService.addLikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
 
-    @RequestMapping("/usr/reaction/getReactionCount")
-    @ResponseBody
-    public int getReactionCount(String relDataTypeCode, int relId) {
-        return reactionService.getReactionCount(relDataTypeCode, relId);
-    }
-
-    @RequestMapping("/usr/reaction/getCurrentReactionStatus")
-    @ResponseBody
-    public int getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId) {
-        if (memberId==0){
-            return 0;
+        if (reactionRd.isFail()) {
+            return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
         }
-        return reactionService.getCurrentReactionStatus(memberId, relDataTypeCode, relId);
+
+        int goodRP = articleService.getLikePoint(relId);
+        int badRP = articleService.getDislikePoint(relId);
+
+        return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg(), "goodRP", goodRP, "badRP", badRP);
     }
+
+    @RequestMapping("/usr/reaction/doDislike")
+    @ResponseBody
+    public ResultData  doDislike(String relDataTypeCode, int relId, String replaceUri) {
+
+        ResultData usersReactionRd = reactionService.usersReaction(rq.getLoginedMemberId(), relDataTypeCode, relId);
+
+        int usersReaction = (int) usersReactionRd.getData1();
+
+        if (usersReaction == -1) {
+            ResultData rd = reactionService.deleteDislikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            int goodRP = articleService.getLikePoint(relId);
+            int badRP = articleService.getDislikePoint(relId);
+            return ResultData.from("S-1", "싫어요 취소", "goodRP", goodRP, "badRP", badRP);
+        } else if (usersReaction == 1) {
+            ResultData rd = reactionService.deleteLikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            rd = reactionService.addDislikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+            int goodRP = articleService.getLikePoint(relId);
+            int badRP = articleService.getDislikePoint(relId);
+            return ResultData.from("S-2", "좋아요 했었음", "goodRP", goodRP, "badRP", badRP);
+        }
+
+        ResultData reactionRd = reactionService.addDislikePoint(rq.getLoginedMemberId(), relDataTypeCode, relId);
+
+        if (reactionRd.isFail()) {
+            return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg());
+        }
+
+        int goodRP = articleService.getLikePoint(relId);
+        int badRP = articleService.getDislikePoint(relId);
+
+        return ResultData.from(reactionRd.getResultCode(), reactionRd.getMsg(), "goodRP", goodRP, "badRP", badRP);
+    }
+
 }
 

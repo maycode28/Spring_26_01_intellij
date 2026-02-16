@@ -9,9 +9,11 @@ import java.util.List;
 @Mapper
 public interface ReactionRepository {
 
-    public Reaction getReaction(int memberId, String relDataTypeCode, int relId);
-    public int getReactionCount(String relDataTypeCode, int relId);
-    public void initReaction(Reaction reaction);
-    public void updateReaction(Reaction reaction);
-    public Integer getCurrentReactionStatus(int memberId, String relDataTypeCode, int relId);
+    public int getSumReactionPoint(int memberId, String relDataTypeCode, int relId);
+
+    public int addLikePoint(int memberId, String relDataTypeCode, int relId);
+
+    public int addDislikePoint(int memberId, String relDataTypeCode, int relId);
+
+    public void deleteReactionPoint(int memberId, String relDataTypeCode, int relId);
 }

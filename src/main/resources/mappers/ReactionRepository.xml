@@ -4,46 +4,46 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 
 <mapper namespace="com.example.demo.repository.ReactionRepository">
-    <select id="getReaction" resultType="com.example.demo.vo.Reaction">
-        SELECT *
-        From reaction
-        where memberId = #{memberId}
-          and relDataTypeCode = #{relDataTypeCode}
-          and relId = #{relId}
-    </select>
-
-    <select id="getReactionCount" resultType="int">
-        SELECT count(*)
-        From reaction
-        where relDataTypeCode = #{relDataTypeCode}
-          and relId = #{relId}
-        and reactionStatus=1
-    </select>
-
-    <update id="updateReaction" parameterType="com.example.demo.vo.Reaction">
-        UPDATE reaction
-        <set>
-            updateDate = NOW(),
-            reactionStatus = #{reactionStatus}
-        </set>
-        WHERE memberId = #{memberId}
-        And relDataTypeCode = #{relDataTypeCode}
-        and relId = #{relId}
-    </update>
-
-    <insert id="initReaction" parameterType="com.example.demo.vo.Reaction">
+    <insert id="addLikePoint">
         INSERT INTO reaction
-        SET regDate = NOW(),
+        SET
+            regDate = NOW(),
 		updateDate = NOW(),
-		memberId = #{memberId}, relDataTypeCode = #{relDataTypeCode}, relId = #{relId}, reactionStatus = #{reactionStatus}
+		memberId = #{memberId},
+            relDataTypeCode =
+            #{relDataTypeCode},
+            relId = #{relId},
+            reactionPoint = 1;
     </insert>
 
-    <select id="getCurrentReactionStatus" resultType="int">
-        SELECT reactionStatus
-        From reaction
-        WHERE memberId = #{memberId}
-                And relDataTypeCode = #{relDataTypeCode}
-                and relId = #{relId}
+    <insert id="addDislikePoint">
+        INSERT INTO reaction
+        SET
+            regDate = NOW(),
+		updateDate = NOW(),
+		memberId = #{memberId},
+            relDataTypeCode =
+            #{relDataTypeCode},
+            relId = #{relId},
+            reactionPoint = -1;
+    </insert>
+
+    <select id="getSumReactionPoint">
+        SELECT IFNULL(SUM(RP.reactionPoint),0)
+        FROM reaction AS
+                 RP
+        WHERE RP.relDataTypeCode = #{relDataTypeCode}
+          AND RP.relId = #{relId}
+          AND
+            RP.memberId = #{memberId};
     </select>
+
+    <delete id="deleteReactionPoint">
+        DELETE
+        FROM reaction
+        WHERE memberId = #{memberId}
+          AND relDataTypeCode = #{relDataTypeCode}
+          AND relId = #{relId}
+    </delete>
 
 </mapper>

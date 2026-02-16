@@ -30,4 +30,16 @@ public interface ArticleRepository {
     int increaseHitCount(int id);
 
     int getArticleHitCount(int id);
+
+    public int increaseLikePoint(int relId);
+
+    public int decreaseLikePoint(int relId);
+
+    public int increaseDislikePoint(int relId);
+
+    public int decreaseDislikePoint(int relId);
+
+    public int getLikePoint(int relId);
+
+    public int getDislikePoint(int relId);
 }

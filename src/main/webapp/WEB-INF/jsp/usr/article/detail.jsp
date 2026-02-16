@@ -36,93 +36,130 @@
     })
 </script>
 
+<!-- 변수 -->
 <script>
-    function ArticleDetail__onReactionClick(reaction) {
-        if (reaction === 1) {
-            if (reactionStatus === 1) {
-                reaction = 0;
-            } else {
-                reaction = 1;
-            }
-
-        } else if (reaction === -1) {
-            if (reactionStatus === -1) {
-                reaction = 0;
-            } else {
-                reaction = -1;
-            }
-        }
-        ArticleDetail__doUpdateReaction(reaction);
-    }
-
-    function ArticleDetail__doUpdateReaction(reaction) {
-        $.get('../reaction/updateReaction', {
-            memberId:${memberId},
-            relDataTypeCode: 'article',
-            relId: params.id,
-            reactionStatus: reaction
-        }, function () {
-            ArticleDetail__getReactionCount();
-            Reaction__getCurrentReactionStatus();
-        }, 'json')
-    }
-
+	var isAlreadyAddGoodRp = ${isAlreadyAddGoodRp};
+	var isAlreadyAddBadRp = ${isAlreadyAddBadRp};
 </script>
 
+<!-- 좋아요 싫어요  -->
 <script>
-    function ArticleDetail__getReactionCount() {
-        $.get('../reaction/getReactionCount', {
-            relDataTypeCode: 'article',
-            relId: params.id,
-            ajaxMode: 'Y'
-        }, function (data) {
-            $('.article-detail__reaction-count').html(data);
-        }, 'json')
-    }
+<!-- 좋아요 싫어요 버튼	-->
+	function checkRP() {
+		if (isAlreadyAddGoodRp == true) {
+            $('#likeButton>i').removeClass('fa-regular');
+            $('#likeButton>i').addClass('fa-solid');
+		} else if (isAlreadyAddBadRp == true) {
+            $('#dislikeButton>i').removeClass('fa-regular');
+			$('#dislikeButton>i').addClass('fa-solid');
+		} else {
+			return;
+		}
+	}
 
-    // $(function () {
-    //     ArticleDetail__getReactionCount();
-    // })
+	function doLike(articleId) {
+
+		$.ajax({
+			url : '/usr/reaction/doLike',
+			type : 'POST',
+			data : {
+				relDataTypeCode : 'article',
+				relId : articleId
+			},
+			dataType : 'json',
+			success : function(data) {
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				if (data.resultCode.startsWith('S-')) {
+					var likeButton = $('#likeButton');
+					var likeCountC = $('.likeCount');
+					var dislikeButton = $('#dislikeButton');
+
+					if (data.resultCode == 'S-1') {
+						likeButton.removeClass('fa-solid');
+                        likeButton.addClass('fa-regular');
+						likeCountC.text(data.data1);
+					} else if (data.resultCode == 'S-2') {
+						dislikeButton.removeClass('fa-solid');
+                        dislikeButton.addClass('fa-regular');
+
+                        likeButton.removeClass('fa-regular');
+						likeButton.addClass('fa-solid');
+						likeCountC.text(data.data1);
+					} else {
+						likeButton.removeClass('fa-regular');
+						likeButton.addClass('fa-solid');
+						likeCountC.text(data.data1);
+					}
+
+				} else {
+					alert(data.msg);
+				}
+
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert('좋아요 오류 발생 : ' + textStatus);
+
+			}
+
+		});
+	}
+
+	function doDislike(articleId) {
+
+		$.ajax({
+			url : '/usr/reaction/doDislike',
+			type : 'POST',
+			data : {
+				relTypeCode : 'article',
+				relId : articleId
+			},
+			dataType : 'json',
+			success : function(data) {
+				console.log(data);
+				console.log('data.data1Name : ' + data.data1Name);
+				console.log('data.data1 : ' + data.data1);
+				console.log('data.data2Name : ' + data.data2Name);
+				console.log('data.data2 : ' + data.data2);
+				if (data.resultCode.startsWith('S-')) {
+					var likeButton = $('#likeButton');
+					var likeCountC = $('.likeCount');
+					var dislikeButton = $('#dislikeButton');
+
+					if (data.resultCode == 'S-1') {
+						dislikeButton.removeClass('fa-solid');
+                        dislikeButton.addClass('fa-regular');
+					} else if (data.resultCode == 'S-2') {
+						likeButton.removeClass('fa-solid');
+                        likeButton.addClass('fa-regular');
+						likeCountC.text(data.data1);
+						dislikeButton.removeClass('fa-regular');
+                        dislikeButton.addClass('fa-solid');
+
+					} else {
+						dislikeButton.removeClass('fa-regular');
+                        dislikeButton.addClass('fa-solid');
+					}
+
+				} else {
+					alert(data.msg);
+				}
+			},
+			error : function(jqXHR, textStatus, errorThrown) {
+				alert('싫어요 오류 발생 : ' + textStatus);
+			}
+
+		});
+	}
+
+	$(function() {
+		checkRP();
+	});
 </script>
 
-<script>
-    let reactionStatus = 0;
-
-    function Reaction__getCurrentReactionStatus() {
-        $.get('../reaction/getCurrentReactionStatus', {
-            memberId:${memberId},
-            relDataTypeCode: 'article',
-            relId: params.id
-        }, function (data) {
-            reactionStatus = data;
-            renderReactionUI();
-        }, 'json')
-    }
-
-    $(function () {
-        Reaction__getCurrentReactionStatus();
-    })
-
-    function renderReactionUI() {
-        $('.btn-like i')
-            .removeClass('fa-solid')
-            .addClass('fa-regular');
-
-        $('.btn-dislike i')
-            .removeClass('fa-solid')
-            .addClass('fa-regular');
-
-        if (reactionStatus === 1) {
-            $('.btn-like i')
-                .removeClass('fa-regular')
-                .addClass('fa-solid');
-        } else if (reactionStatus === -1) {
-            $('.btn-dislike i')
-                .removeClass('fa-regular')
-                .addClass('fa-solid');
-        }
-    }
-</script>
 
 <div class="flex justify-between">
     <h1 class="p-7">${article.id}번 게시글 상세</h1>
@@ -164,7 +201,7 @@
             </tr>
             <tr>
                 <th style="text-align: center;">DISLIKE</th>
-                <td style="text-align: center;">${article.extra__badReactionPoint }</td>
+                <td style="text-align: center;">${article.dislikePoint}</td>
             </tr>
             <tr>
                 <th style="text-align: center;">SUM</th>
@@ -189,13 +226,13 @@
                 </c:if>
             </div>
             <div class="btns">
-                <button class="btn btn-outline btn-ghost btn-like" type="button"
-                        onClick="ArticleDetail__onReactionClick(1)">
+                <button id="likeButton" class="btn btn-outline btn-ghost btn-like" type="button"
+                        onClick="doLike(${param.id})">
                     <i class="fa-regular fa-thumbs-up"></i>
-                    <div class="inline article-detail__reaction-count">${article.extra__goodReactionPoint}</div>
+                    <span class="likeCount">${article.likePoint}</span>
                 </button>
-                <button class="btn btn-outline btn-ghost btn-dislike" type="button"
-                        onClick="ArticleDetail__onReactionClick(-1)">
+                <button id="dislikeButton" class="btn btn-outline btn-ghost btn-dislike" type="button"
+                        onClick="doDislike(${param.id})">
                     <i class="fa-regular fa-thumbs-down"></i>
                 </button>
             </div>

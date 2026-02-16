@@ -8,29 +8,26 @@
         INSERT INTO article
         SET regDate = NOW(),
 		updateDate = NOW(),
-		title = #{title},
-            body = #{body},
-            memberId = #{memberId},
-            boardId = #{boardId}
+		title = #{title}, body = #{body}, memberId = #{memberId}, boardId = #{boardId}
     </insert>
 
     <select id="getLastInsertId" parameterType="int">
-        SELECT
-            LAST_INSERT_ID();
+        SELECT LAST_INSERT_ID();
     </select>
 
     <delete id="deleteArticle" parameterType="int">
-        DELETE FROM article
+        DELETE
+        FROM article
         WHERE id = #{id}
     </delete>
 
     <update id="modifyArticle" parameterType="map">
         UPDATE article
-            <set>
-             updateDate = NOW()
+        <set>
+            updateDate = NOW()
             <if test="title!=null and title !=''">,title = #{title}</if>
             <if test="body!=null and body!=''">,`body` = #{body}</if>
-            </set>
+        </set>
         WHERE id = #{id}
     </update>
 
@@ -43,13 +40,11 @@
 
     <select id="getForPirntArticles"
             resultType="com.example.demo.vo.Article">
-        SELECT a.*, m.nickname as author, b.name as board, IFNULL(SUM(r.reactionStatus),0) AS extra__sumReactionPoint,
-        IFNULL(count(case when r.reactionStatus=1 then 1 end),0) AS extra__goodReactionPoint,
-        IFNULL(count(case when r.reactionStatus=-1 then 1 end),0) AS extra__badReactionPoint
+        SELECT a.*, m.nickname as author, b.name as board
         FROM article a
         inner join member m
         on a.memberId = m.id
-        inner join  board b
+        inner join board b
         on a.boardId = b.id
         left join reaction as r
         on a.id =r.relId and r.relDataTypeCode='article'
@@ -80,7 +75,7 @@
         FROM article a
         inner join member m
         on a.memberId = m.id
-        inner join  board b
+        inner join board b
         on a.boardId = b.id
         WHERE 1=1
         <if test="boardId != 0">
@@ -104,22 +99,20 @@
     <select id="getForPrintArticle" parameterType="int"
             resultType="com.example.demo.vo.Article">
 
-        SELECT a.*, m.nickname as author, b.name as board, IFNULL(SUM(r.reactionStatus),0) AS extra__sumReactionPoint,
-               IFNULL(count(case when r.reactionStatus=1 then 1 end),0) AS extra__goodReactionPoint,
-               IFNULL(count(case when r.reactionStatus=-1 then 1 end),0) AS extra__badReactionPoint
+        SELECT a.*,
+               m.nickname                                                   as author,
+               b.name                                                       as board
         FROM article AS a
                  INNER JOIN `member` AS m
                             on a.memberId = m.id
                  inner join board b
                             on a.boardId = b.id
-                 left join reaction as r
-                           on a.id =r.relId and r.relDataTypeCode='article'
         WHERE a.id = #{id}
     </select>
 
     <update id="increaseHitCount" parameterType="int">
         UPDATE article
-        set hitCount=hitCount+1
+        set hitCount=hitCount + 1
         WHERE id = #{id}
     </update>
 
@@ -127,6 +120,49 @@
         SELECT hitCount
         FROM article
         WHERE id = #{id}
+    </select>
+
+    <update id="increaseLikePointPoint" parameterType="int">
+        UPDATE
+            article
+        SET likePoint = likePoint + 1
+        WHERE id = #{relId}
+    </update>
+
+    <update id="decreaseLikePointPoint" parameterType="int">
+        UPDATE
+            article
+        SET likePoint = likePoint - 1
+        WHERE id =
+              #{relId}
+    </update>
+
+    <update id="increaseDislikePoint" parameterType="int">
+        UPDATE
+            article
+        SET dislikePoint = dislikePoint + 1
+        WHERE id = #{relId}
+    </update>
+
+    <update id="decreaseDislikePoint" parameterType="int">
+        UPDATE
+            article
+        SET dislikePoint = dislikePoint - 1
+        WHERE id = #{relId}
+    </update>
+
+    <select id="getLikePoint">
+        SELECT likePoint
+        FROM article
+        WHERE id =
+              #{relId}
+    </select>
+
+    <select id="getDislikePoint">
+        SELECT dislikePoint
+        FROM article
+        WHERE id =
+              #{relId}
     </select>
 
 

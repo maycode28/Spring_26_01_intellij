@@ -80,9 +80,9 @@
                     </td>
                     <td style="text-align: center;">${article.author}</td>
                     <td style="text-align: center;">${article.hitCount}</td>
-                    <td style="text-align: center;">${article.extra__sumReactionPoint }</td>
-                    <td style="text-align: center;">${article.extra__goodReactionPoint }</td>
-                    <td style="text-align: center;">${article.extra__badReactionPoint }</td>
+                    <td style="text-align: center;">${article.likePoint-article.dislikePoint}</td>
+                    <td style="text-align: center;">${article.likePoint}</td>
+                    <td style="text-align: center;">${article.dislikePoint}</td>
                 </tr>
             </c:forEach>
             </tbody>
